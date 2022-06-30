@@ -69,9 +69,9 @@
                                 @if ($product->image)
                                 <img src="{{ asset('product-images/' . $product->image) }}"
                                 height="50" width="75">
-                            @else
-                                <small>No Image</small>
-                            @endif
+                                @else
+                                    <small>No Image</small>
+                                @endif
                             </div>
                         </div>
 
@@ -223,7 +223,6 @@
 
 @push('scripts')
     <script type="text/javascript">
-        // Upload Image Preview
         $(document).ready(function (e) {
             //add more fields group
             $(".addMore").click(function(){

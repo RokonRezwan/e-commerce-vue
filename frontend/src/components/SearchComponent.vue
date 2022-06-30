@@ -13,7 +13,7 @@
                 <router-link v-for="(product, index) in limitedProductsList" :key="index" 
                 :to="`/product/${product.id}`" :id="product.id" 
                 class="list-group-item list-group-item-action py-1 px-2 text-primary" @click="resetInput">
-                    {{ product.title }}
+                    {{ product.name }}
                 </router-link>
             </div>
         </div>
@@ -27,7 +27,6 @@ export default {
     data(){
         return{
             search: '',
-            category:'',
             searchResultsLimit: 10
         }
     },
@@ -38,11 +37,6 @@ export default {
     },
 
     computed: {
-
-
-        categories() {
-            return this.$store.getters.categories;
-        },
 
         filterProducts(){
             if (this.search) {
@@ -61,7 +55,7 @@ export default {
     methods: {
 
         filterProductsByName: function(products) {
-            return products.filter(product => { return product.title.toLowerCase().includes(this.search.toLowerCase())
+            return products.filter(product => { return product.name.toLowerCase().includes(this.search.toLowerCase())
             })
         },
         
