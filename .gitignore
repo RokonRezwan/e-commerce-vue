@@ -1,2 +1,3 @@
-frontend/node_modules/*
-backend/public/product-images/*
+frontend/node_modules
+backend/vendor
+backend/public/product-images
