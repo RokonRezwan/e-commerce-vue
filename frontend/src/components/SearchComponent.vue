@@ -2,20 +2,17 @@
     <div class="row g-0 position-relative w-100">
         <div class="col-12">
             <div class="input-group p-1" style="border-radius: 10px 0px 0px 10px">
-                <input type="text" v-model="search" placeholder="Search Product" class="form-control shadow-none px-3 py-2">
+                <input type="text" v-model="search" placeholder="Search Product" class="form-control shadow-none px-3 py-2" @focus="showResult = true" @blur="hideResult">
                 <button name="search" class="btn btn-primary">
                     <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
             </div>
         </div>
-        <div class="col-12 position-absolute mt-5" style="z-index:9999;">
-            <div v-if="limitedProductsList.length > 0" class="list-group">
-                <router-link v-for="(product, index) in limitedProductsList" :key="index" 
-                :to="`/product/${product.id}`" :id="product.id" 
-                class="list-group-item list-group-item-action py-1 px-2 text-primary" @click="resetInput">
-                    {{ product.name }}
-                </router-link>
-            </div>
+        <div v-if="showResult" class="col-12 position-absolute mt-5 list-group" style="z-index:9999;">
+            <router-link v-for="(product, index) in limitedProductsList" :key="index" 
+            :to="{name: 'ProductDetails', params: {id: Number(product.id)}}" class="list-group-item list-group-item-action py-1 px-2 text-primary">
+                {{ product.name }}
+            </router-link>
         </div>
     </div>
 </template>
@@ -27,7 +24,8 @@ export default {
     data(){
         return{
             search: '',
-            searchResultsLimit: 10
+            searchResultsLimit: 10,
+            showResult: false,
         }
     },
 
@@ -38,16 +36,14 @@ export default {
 
     computed: {
 
-        filterProducts(){
+        limitedProductsList(){
             if (this.search) {
-            return this.filterProductsByName(this.$store.getters.products)
-            } else {
+                this.showResult = true;
+                return this.filterProductsByName(this.$store.getters.products).slice(0, this.searchResultsLimit);
+            } 
+            else {
                 return '';
             }
-        },
-
-        limitedProductsList(){
-            return this.filterProducts.slice(0, this.searchResultsLimit);
         }
         
     },
@@ -59,9 +55,9 @@ export default {
             })
         },
         
-        resetInput(){
-            this.search = ''
-        },
+        hideResult() {
+            setTimeout(() => this.showResult = false, 150);
+        }
 
     }
 }

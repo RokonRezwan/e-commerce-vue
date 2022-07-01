@@ -15,11 +15,11 @@
             <tbody>
                 <tr v-for="(product, index) in cart" :key="index">
                     <td class="v-align">{{ index + 1 }}</td>
-                    <td class="text-start v-align">{{ product.title }}</td>
+                    <td class="text-start v-align">{{ product.name }}</td>
                     <td>
-                        <img :src="product.image[0]" height="40" width="50" />
+                        <img :src="'http://127.0.0.1:8000/product-images/'+ product.image" height="40" width="50" />
                     </td>
-                    <td class="v-align">{{ "$" + product.price }}</td>
+                    <td class="v-align">{{ "$" + product.price.toFixed(2) }}</td>
                     <td>
                         <input type="number" class="form-control text-center" min="1" :value="product.quantity"
                             @change="updateQuantity(product.id, $event)" />

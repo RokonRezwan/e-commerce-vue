@@ -32,17 +32,17 @@
                     <div class="row row-cols-1 row-cols-md-4 g-4">
                         <div v-for="(product, index) in filterProducts" :key="index">
                             <div class="card h-100">
-                                <router-link :to="`/product/${product.id}`" :id="product.id" class="p-2" target="_blank">
-                                    <img :src="`http://127.0.0.1:8000/product-images/${product.image}`" class="card-img-top" :alt="product.name" style="height:130px">
+                                <router-link :to="{name: 'ProductDetails', params: {id: Number(product.id)}}" class="p-2" target="_blank">
+                                    <img :src="'http://127.0.0.1:8000/product-images/'+ product.image" class="card-img-top" :alt="product.name" style="height:130px">
                                 </router-link>
                                 <div class="card-body g-0">
                                     <h6 class="card-title p-2 text-danger">
-                                        <router-link :to="`/product/${product.id}`" :id="product.id" class="router-link" target="_blank">{{ product.name.substring(0, 35) }}</router-link>
+                                        <router-link :to="{name: 'ProductDetails', params: {id: Number(product.id)}}" class="router-link" target="_blank">{{ product.name.substring(0, 35) }}</router-link>
                                     </h6>
                                 </div>
                                 <div class="card-footer text-center fs-5 p-1">
-                                    <small class="text-primary float-start ms-2"> $500</small>
-                                    <button class="btn btn-outline-danger btn-sm float-end" v-on:click="addToCart(product.id)">
+                                    <small class="text-primary float-start ms-2"> ${{ product.prices[0].amount.toFixed(2) }}</small>
+                                    <button class="btn btn-outline-danger btn-sm float-end shadow-none" v-on:click="addToCart(product.id)">
                                         <i class="fas fa-shopping-cart"></i>
                                     </button>
                                 </div>

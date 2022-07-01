@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <div class="row g-0">
                         <div class="col-4">
-                            <img :src="`http://127.0.0.1:8000/product-images/${product.image}`" class="card-img-top" :alt="product.name" style="height:130px">
+                            <img :src="'http://127.0.0.1:8000/product-images/'+ product.image" class="card-img-top" :alt="product.name" style="height:130px">
                         </div>
                         <div class="col-8 px-3 py-1">
                             <h3 class="card-title border-bottom pb-2">{{ product.name }}</h3>
@@ -22,7 +22,7 @@
                                 <div class="col-12">
                                     <div class="text-black fs-5">Category: <strong class="text-primary">{{ product.category.name }}</strong></div>
                                     <div class="text-black fs-5">Price: <strong class="text-primary">$500</strong></div>
-                                    <button class="btn btn-outline-danger mt-1" v-on:click="addToCart(product.id)">
+                                    <button class="btn btn-outline-danger mt-1 shadow-none" v-on:click="addToCart(product.id)">
                                         <i class="fas fa-shopping-cart"></i>
                                     </button>
                                     <p class="card-text fs-6 pt-1">{{ product.description }}</p>
@@ -56,6 +56,15 @@ export default {
 
     components: {
         CategoryList
+    },
+
+
+    watch: {
+        id: function (value, oldValue) {
+            if (value !== oldValue ) {
+                axios.get('http://127.0.0.1:8000/api/api-products/' + this.id).then(response => (this.product = response.data.product));
+            }
+        },
     },
 
     mounted() {
