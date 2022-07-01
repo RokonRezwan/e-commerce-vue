@@ -32,6 +32,11 @@ class Product extends Model
         return $this->hasMany(ProductPrices::class)->with('priceTypes:id,name,is_active');
     }
 
+    public function currentPrice()
+    {
+        return $this->hasOne(ProductPrices::class)->with('priceTypes:id,name')->where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'));
+    }
+
     public function orderDetails()
     {
         return $this->belongsTo(OrderDetails::class);
