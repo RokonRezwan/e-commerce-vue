@@ -10,7 +10,7 @@
         </div>
         <div v-if="showResult" class="col-12 position-absolute mt-5 list-group" style="z-index:9999;">
             <router-link v-for="(product, index) in limitedProductsList" :key="index" 
-            :to="{name: 'ProductDetails', params: {id: Number(product.id)}}" class="list-group-item list-group-item-action py-1 px-2 text-primary">
+            :to="{name: 'ProductDetails', params: {id: product.id}}" class="list-group-item list-group-item-action py-1 px-2 text-primary">
                 {{ product.name }}
             </router-link>
         </div>
