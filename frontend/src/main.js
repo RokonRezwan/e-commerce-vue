@@ -6,8 +6,22 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
+import LaravelVuePagination from 'laravel-vue-pagination';
+
 import router from "./router";
 
 import store from "./store";
 
-createApp(App).use(router).use(store).mount("#app");
+const app = createApp(App)
+
+
+app.component('Pagination', LaravelVuePagination)
+
+
+
+
+
+
+app.use(router)
+app.use(store)
+app.mount("#app");

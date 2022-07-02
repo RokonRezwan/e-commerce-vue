@@ -82,10 +82,15 @@ export default createStore({
   },
 
   actions: {
-    async fetchProducts({ commit }) {
+    async fetchProducts({ commit }, page) {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/api-products");
-        commit("SET_PRODUCTS", response.data.products);
+
+        if (typeof page === 'undefined') {
+          page = 1;
+        }
+
+        const response = await axios.get('http://127.0.0.1:8000/api/api-products?page=' + page);
+        commit("SET_PRODUCTS", response.data.products.data);
         // console.log(response.data.products);
       } catch (error) {
         // console.log(error)

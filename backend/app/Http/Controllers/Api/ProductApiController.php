@@ -12,8 +12,8 @@ class ProductApiController extends Controller
 
     public function index()
     {
-        $products = Product::with('category:id,name,slug','prices:id,product_id,price_type_id,amount,start_date,end_date')->where('is_active', true)->get($this->_getColumns);
-        
+        $products = Product::with('category:id,name,slug','prices:id,product_id,price_type_id,amount,start_date,end_date')->where('is_active', true)->paginate(2, $this->_getColumns);
+
         return response()->json([
             'products' => $products
         ], 200);
