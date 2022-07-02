@@ -7,7 +7,7 @@
         <div class="col-md-12 w-75">
 
             <div class="row justify-content-center g-0">
-                <div class="col-12 text-end">
+                <div class="col-12 text-end mb-2">
                     <a href="{{ route('products.index') }}" class="btn btn-primary">Back</a>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                         <div class="row p-2">
                             <label for="category" class="col-md-2 col-form-label">Category</label>
                             <div class="col-md-10">
-                                
+
                                 <select class="form-control" name="category_id">
                                     <option value="">Choose Category</option>
                                     @foreach ($categories as $category)
@@ -63,19 +63,19 @@
                             <label for="image" class="col-md-2 col-form-label">Image</label>
                             <div class="col-md-8">
                                 <input type="file" id="image" class="form-control" value="{{ old('image') }}"
-                                    name="image" accept="image/*">                                
+                                    name="image" accept="image/*">
                             </div>
                             <div class="col-md-2">
                                 @if ($product->image)
                                 <img src="{{ asset('product-images/' . $product->image) }}"
-                                height="50" width="75">                                                
-                            @else
-                                <small>No Image</small>
-                            @endif
+                                height="50" width="75">
+                                @else
+                                    <small>No Image</small>
+                                @endif
                             </div>
                         </div>
-                        
-                        
+
+
 
                         <div class="row prices p-2">
                             <label for="price" class="col-md-2 col-form-label">Price</label>
@@ -85,7 +85,7 @@
                                     <div class="col-md-2 col-12">
                                         <label for="price_type_id" class="form-label">Price Type</label>
                                     </div>
-        
+
                                     <div class="col-md-2 col-12">
                                         <label for="price" class="form-label">Price</label>
                                     </div>
@@ -97,7 +97,7 @@
                                     <div class="col-md-3 col-12">
                                         <label for="price" class="form-label">End Date</label>
                                     </div>
-        
+
                                     <div class="col-md-2 col-12">
                                         <a href="javascript:void(0)" class="btn btn-success addMore"><span class="glyphicon glyphicon glyphicon-plus"
                                                 aria-hidden="true"></span> Add More</a>
@@ -110,13 +110,13 @@
                                     <div class="row col-md-10" style="margin-bottom: 5px">
                                         <div class="col-md-2 col-12 g-0" style="padding-right:5px!important">
                                             <select class="form-select" name="price_type_id[]" id="price_type_id">
-                                            <option value="" selected>Select Price Type</option>                                                
+                                            <option value="" selected>Select Price Type</option>
                                                 @foreach ($priceTypes as $ptype)
                                                 <option value="{{ $ptype->id }}" @if ($ptype->id == $price->priceTypes->id) selected @endif>{{ $ptype->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-        
+
                                         <div class="col-md-2 col-12" style="padding-right:5px!important">
                                             <input type="number" min="0" class="form-control" name="amount[]" id="amount" placeholder="Price"
                                                     value="{{ $price->amount }}">
@@ -126,12 +126,12 @@
                                             <input type="date" class="form-control" name="start_date[]" value="{{ $price->start_date }}"
                                                 id="start_date">
                                         </div>
-        
+
                                         <div class="col-12 col-md-3 g-0" style="padding-right:5px!important">
                                             <input type="date" class="form-control" name="end_date[]" value="{{ $price->end_date }}"
                                                 id="end_date">
                                         </div>
-        
+
                                         <div class="col-md-2 col-12 d-flex align-items-end g-0" style="margin-top:5px!important;">
                                             <a href="javascript:void(0)" class="btn btn-danger deleteRecord" data-id="{{ $price->id }}"><span class="glyphicon glyphicon glyphicon-remove"
                                                     aria-hidden="true"></span> Remove</a>
@@ -147,7 +147,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-        
+
                                         <div class="col-md-3 col-12 g-0" style="padding-right:5px!important">
                                             <input type="number" min="0" class="form-control" name="new_amount[]" id="new_amount" placeholder="Price"
                                                     value="{{ old('new_amount[]') }}">
@@ -157,7 +157,7 @@
                                             <input type="date" class="form-control" name="new_start_date[]" value="{{ date('Y-m-d') }}"
                                                 id="new_start_date">
                                         </div>
-        
+
                                         <div class="col-12 col-md-3 g-0" style="padding-right:5px!important">
                                             <input type="date" class="form-control" name="new_end_date[]" value="{{ date('Y-m-d') }}"
                                                 id="new_end_date">
@@ -196,7 +196,7 @@
                         @endforeach
                     </select>
                 </div>
-    
+
                 <div class="col-12 col-md-2 g-0" style="padding-right:5px!important">
                     <input type="number" min="0" class="form-control" name="new_amount[]" id="new_amount" placeholder="Price"
                             value="{{ old('new_amount[]') }}">
@@ -211,19 +211,18 @@
                     <input type="date" class="form-control" name="new_end_date[]" value="{{ date('Y-m-d') }}"
                         id="new_end_date">
                 </div>
-    
+
                 <div class="col-md-2 col-12 d-flex align-items-end g-0">
                     <a href="javascript:void(0)" class="btn btn-danger remove"><span class="glyphicon glyphicon glyphicon-remove"
                             aria-hidden="true"></span> Remove</a>
                 </div>
-    
+
             </div>
         </div>
 @endsection
 
 @push('scripts')
     <script type="text/javascript">
-        // Upload Image Preview
         $(document).ready(function (e) {
             //add more fields group
             $(".addMore").click(function(){

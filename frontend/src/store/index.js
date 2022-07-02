@@ -55,9 +55,9 @@ export default createStore({
       if (!record) {
         state.storeCart.push({
           id: id,
-          title: item.title,
-          price: item.price,
-          image: item.images,
+          name: item.name,
+          price: item.prices[0].amount,
+          image: item.image,
           quantity: 1,
         });
       } else {

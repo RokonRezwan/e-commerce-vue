@@ -14,14 +14,14 @@ const routes = [
   },
 
   {
-    path: "/category/:id",
-    name: "ProductCategory",
+    path: "/category/:id?",
+    name: "CategoryWiseProducts",
     component: () => import('../views/products/CategoryWiseProducts.vue'),
     props: true,
   },
   
   {
-    path: "/product/:id",
+    path: "/product/:id?",
     name: "ProductDetails",
     component: () => import('../views/products/Details.vue'),
     props: true,

@@ -10,7 +10,7 @@
         <div class="col-md-12">
 
             <div class="row justify-content-center g-0">
-                <div class="col-12 text-end">
+                <div class="col-12 text-end mb-2">
                     <a class="btn btn-primary" href="{{ route('home') }}">Back</a>
                     <a class="btn btn-primary" href="{{ route('products.create') }}">Add Product</a>
                 </div>
@@ -49,14 +49,14 @@
                                         <td>
                                             @if ($product->image)
                                                 <img src="{{ asset('product-images/' . $product->image) }}"
-                                                height="60" width="50">  
+                                                height="60" width="50">
                                             @else
                                                 <small>No Image</small>
                                             @endif
                                         </td>
                                         <td class="text-center">
                                             @foreach ($product->prices as $price)
-                                            <div>{{ $price->priceTypes->name }} : <strong>৳ {{ $price->amount }}</strong></div> 
+                                            <div>{{ $price->priceTypes->name }} : <strong>৳ {{ $price->amount }}</strong></div>
                                             @endforeach
                                         </td>
                                         <td class="text-center">
@@ -74,7 +74,7 @@
                                         </td>
                                         <td class="text-center">
                                             <div class="btn-group" role="group">
-                                                 <a href="{{ route('products.show', $product->id) }}" 
+                                                 <a href="{{ route('products.show', $product->id) }}"
                                                     class="btn btn-primary me-1"><i class="fa fa-eye"></i></a>
 
                                                 <a href="{{ route('products.edit', $product->id) }}"
