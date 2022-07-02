@@ -41,7 +41,7 @@
                                     </h6>
                                 </div>
                                 <div class="card-footer text-center fs-5 p-1">
-                                    <small class="text-primary float-start ms-2"> ${{ product.prices[0].amount.toFixed(2) }}</small>
+                                    <small class="text-primary float-start ms-2 pt-1"> ${{ product.prices[0].amount.toFixed(2) }}</small>
                                     <button class="btn btn-outline-danger btn-sm float-end shadow-none" v-on:click="addToCart(product.id)">
                                         <i class="fas fa-shopping-cart"></i>
                                     </button>
@@ -80,7 +80,7 @@ export default {
 
     computed: {
 
-        filterProducts: function(){
+        filterProducts(){
             return this.filterProductsByPrice(this.$store.getters.products)
         },
 

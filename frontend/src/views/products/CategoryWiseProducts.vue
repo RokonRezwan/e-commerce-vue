@@ -8,8 +8,8 @@
                 <div class="col-12">
                     <div class="row p-2 mb-2">
 
-                        <div class="col-12 text-center border-bottom border-gray">
-                            <h3> Category: {{ category.name }} ( {{ productLength }} )</h3>
+                        <div class="col-12 text-center border-bottom border-gray pb-2">
+                            <strong class="fs-4"> Category: </strong><strong class="fs-4 text-primary">{{ filterProducts[0].category.name }} ( {{ filterProducts.length }} )</strong>
                         </div>
 
                         <div class="row g-0 mt-2">
@@ -34,7 +34,7 @@
                     </div>
                     <div class="row row-cols-1 row-cols-md-4 g-4">
 
-                        <div v-for="(product, index) in category.products" :key="index">
+                        <div v-for="(product, index) in filterProducts" :key="index">
                             <div class="card h-100">
                                 <router-link :to="{ name: 'ProductDetails', params: { id: product.id } }" class="p-2"
                                     target="_blank">
@@ -49,7 +49,7 @@
                                     </h6>
                                 </div>
                                 <div class="card-footer text-center fs-5 p-1">
-                                    <small class="text-primary float-start ms-2"> ${{
+                                    <small class="text-primary float-start ms-2 pt-1"> ${{
                                             product.prices[0].amount.toFixed(2)
                                     }}</small>
                                     <button class="btn btn-outline-danger btn-sm float-end shadow-none"
@@ -61,7 +61,7 @@
                         </div>
 
                     </div>
-                    <div class="row g-0 mt-3">
+                    <div class="row g-0 mt-5">
 
                         <div class="col-12">
 
@@ -95,12 +95,12 @@
 </template>
 
 <script>
-import axios from 'axios';
 
 import CategoryList from '../../partials/CategoryList.vue';
 
 export default {
     name: 'CategoryWiseProducts',
+
     props: {
         id: {
             type: Number,
@@ -110,8 +110,6 @@ export default {
 
     data() {
         return {
-            category: '',
-            productLength: 0,
             filterName: '1',
             filterByAD: '1',
         }
@@ -121,29 +119,22 @@ export default {
         CategoryList
     },
 
-    watch: {
-        id: function (value, oldValue) {
-            if (value !== oldValue) {
-                axios.get('http://127.0.0.1:8000/api/api-category/' + this.id)
-                    .then(response => {
-                        this.productLength = response.data.category.products.length;
-                        this.category = response.data.category
-                    });
-            }
-        },
-    },
+    computed: {
 
-    mounted() {
-        axios.get('http://127.0.0.1:8000/api/api-category/' + this.id)
-            .then(response => {
-                this.productLength = response.data.category.products.length;
-                this.category = response.data.category
-            });
+        filterProducts(){
+            return this.filterProductsByCategory(this.filterProductsByPrice(this.$store.getters.products))
+        },
+        
     },
 
     methods: {
+
         addToCart(id) {
             this.$store.dispatch("addItem", id);
+        },
+
+        filterProductsByCategory: function(products){
+            return products.filter( product => product.category.id == this.id );
         },
 
         filterProductsByPrice: function (products) {

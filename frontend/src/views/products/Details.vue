@@ -20,14 +20,28 @@
 
                             <div class="row g-0">
                                 <div class="col-12">
-                                    <div class="text-black fs-5">Category: <strong class="text-primary">{{ product.category.name }}</strong></div>
-                                    <div class="text-black fs-5">Price: <strong class="text-primary">$500</strong></div>
-                                    <button class="btn btn-outline-danger mt-1 shadow-none" v-on:click="addToCart(product.id)">
-                                        <i class="fas fa-shopping-cart"></i>
-                                    </button>
-                                    <p class="card-text fs-6 pt-1">{{ product.description }}</p>
+                                    <div class="text-black fs-5">Category: <strong class="text-primary">
+                                        <router-link :to="{name: 'CategoryWiseProducts', params: {id: product.category.id}}" class="router-link p-2">
+                                            {{ product.category.name }}
+                                        </router-link>
+                                        </strong></div>
+                                    <div class="row g-0">
+                                        <div class="col-sm-12 col-md-6 fs-4">
+                                            Price: <strong class="text-primary">${{ product.prices[0].amount.toFixed(2) }}</strong>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 text-end">
+                                            <button class="btn btn-outline-danger mt-1 shadow-none" v-on:click="addToCart(product.id)">
+                                                Add to Cart <i class="fas fa-shopping-cart"></i>
+                                            </button>
+                                        </div>
+                                    </div>                                   
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col-12 border-top border-gray-500 mt-4">
+                            <p class="card-text fs-6 py-2" style="text-align: justify">{{ product.description }}</p>
                         </div>
                     </div>
                 </div>
@@ -57,7 +71,6 @@ export default {
     components: {
         CategoryList
     },
-
 
     watch: {
         id: function (value, oldValue) {

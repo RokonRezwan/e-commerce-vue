@@ -14,17 +14,17 @@ const routes = [
   },
 
   {
-    path: "/category/:id?",
+    path: "/category/:id",
     name: "CategoryWiseProducts",
     component: () => import('../views/products/CategoryWiseProducts.vue'),
-    props: true,
+    props: route => ({ id: Number(route.params.id) }),
   },
   
   {
-    path: "/product/:id?",
+    path: "/product/:id",
     name: "ProductDetails",
     component: () => import('../views/products/Details.vue'),
-    props: true,
+    props: route => ({ id: Number(route.params.id) }),
   },
 
   {
