@@ -52,7 +52,10 @@
                     <div class="row g-0 mt-4">
                         <div class="col-12 py-2">
 
-                            <nav aria-label="...">
+<Pagination :data="filterProducts"></pagination>
+
+
+                            <!-- <nav aria-label="...">
                                 <ul class="pagination justify-content-center">
                                     <li class="page-item disabled">
                                     <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
@@ -70,7 +73,7 @@
                                     <a class="page-link" href="#">Next</a>
                                     </li>
                                 </ul>
-                            </nav>
+                            </nav> -->
                         </div>
                     </div>
                 </div>
@@ -93,7 +96,7 @@ export default {
     },
     
     components: {
-        CategoryList,
+        CategoryList
     },
 
     computed: {
