@@ -11,7 +11,19 @@
                             <h3> List of All Products</h3>
                         </div>
                         <div class="row g-0 mt-2">
-                            <div class="col-7 text-end pe-2" style="padding-top:7px">                             
+                            <div class="col-4 ps-1 g-0" style="padding-top:7px">                             
+                                <div class="input-group">
+                                    <select class="form-select shadow-none m-0" v-model="pageSize" style="max-width:70px">
+                                        <option value="10" selected>10</option>
+                                        <option value="20">20</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text bg-transparent border-0" id="">Products Show Per Page</span>
+                                    </div>                                        
+                                </div> 
+                            </div>    
+                            <div class="col-3 text-end pe-2" style="padding-top:7px">                             
                                 <label for="password" class="form-label">Filter By</label>
                             </div>     
                             <div class="col-2 pe-1">
@@ -30,7 +42,7 @@
                         </div>
                     </div>
                     <div class="row row-cols-1 row-cols-md-4 g-4">
-                        <div v-for="(product, index) in filterProducts" :key="index">
+                        <div v-for="(product, index) in paginatedProducts" :key="index">
                             <div class="card h-100">
                                 <router-link :to="{name: 'ProductDetails', params: {id: product.id}}" class="p-2" target="_blank">
                                     <img :src="'http://127.0.0.1:8000/product-images/'+ product.image" class="card-img-top" :alt="product.name" style="height:130px">
@@ -49,33 +61,28 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="row g-0 mt-4">
                         <div class="col-12 py-2">
-
-<Pagination :data="filterProducts"></pagination>
-
-
-                            <!-- <nav aria-label="...">
+                             <nav>
                                 <ul class="pagination justify-content-center">
-                                    <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                                    <li class="page-item" v-bind:class="current === 1 ? 'disabled': ''">
+                                    <a class="page-link shadow-none" style="cursor:pointer" @click="prev()">Previous</a>
                                     </li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
                                     <li class="page-item active" aria-current="page">
-                                    <a class="page-link" href="#">4</a>
+                                    <a class="page-link">{{ current }}</a>
                                     </li>
-                                    <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">6</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">7</a></li>
-                                    <li class="page-item">
-                                    <a class="page-link" href="#">Next</a>
+                                    <li class="page-item disabled p-0">
+                                        <a class="page-link ps-1" aria-disabled="true">of {{ totalPage }}</a>
+                                    </li>
+                                    <li class="page-item" v-bind:class="current === totalPage ? 'disabled': ''">
+                                    <a class="page-link shadow-none" style="cursor:pointer" @click="next()">Next</a>
                                     </li>
                                 </ul>
-                            </nav> -->
+                            </nav>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -92,6 +99,8 @@ export default {
         return{
             filterName: '1',
             filterByAD: '1',
+            current: 1,
+            pageSize: 10,
         }
     },
     
@@ -100,14 +109,44 @@ export default {
     },
 
     computed: {
+
+        indexStart() {
+            return (this.current - 1) * this.pageSize;
+        },
+        
+        indexEnd() {
+            return this.indexStart + this.pageSize;
+        },
+
+        paginatedProducts() {
+            return this.filterProducts.slice(this.indexStart, this.indexEnd);
+        },
+
+        totalPage(){
+            const allProducts = this.$store.getters.products;
+            const total = allProducts.length;
+            return Math.ceil(total / this.pageSize)
+        },
+
         filterProducts(){
             return this.filterProductsByPrice(this.$store.getters.products)
-        },
+        }
+
     },
 
     methods: {
         addToCart(id) {
             this.$store.dispatch("addItem", id);
+        },
+
+        prev() {
+            if (this.current === 1) return;
+            this.current--;
+        },
+        
+        next() {
+            if (this.current === Number(this.totalPage)) return;
+            this.current++;
         },
 
         filterProductsByPrice: function(products){

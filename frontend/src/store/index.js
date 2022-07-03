@@ -82,16 +82,10 @@ export default createStore({
   },
 
   actions: {
-    async fetchProducts({ commit }, page) {
+    async fetchProducts({ commit }) {
       try {
-
-        if (typeof page === 'undefined') {
-          page = 1;
-        }
-
-        const response = await axios.get('http://127.0.0.1:8000/api/api-products?page=' + page);
-        commit("SET_PRODUCTS", response.data.products.data);
-        // console.log(response.data.products);
+        const response = await axios.get('http://127.0.0.1:8000/api/api-products');
+        commit("SET_PRODUCTS", response.data.products);
       } catch (error) {
         // console.log(error)
       }
@@ -101,7 +95,6 @@ export default createStore({
       try {
         const response = await axios.get("http://127.0.0.1:8000/api/api-categories");
         commit("SET_CATEGORIES", response.data.categories);
-        //console.log(response.data.categories);
       } catch (error) {
         // console.log(error)
       }
@@ -126,5 +119,6 @@ export default createStore({
       context.commit("CLEAR_CART");
       localStorage.setItem("cart", JSON.stringify(context.state.storeCart));
     },
+    
   },
 });
