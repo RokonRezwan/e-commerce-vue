@@ -1,4 +1,12 @@
 import {createRouter, createWebHistory} from 'vue-router'
+import store from "../store"
+
+const isAuthenticated = store.getters.isAuthenticated;
+
+const checkLogin = (to, from, next) =>{
+  if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' })
+  else next()
+}
 
 const routes = [
   {
@@ -36,6 +44,7 @@ const routes = [
   {
     path: "/checkout",
     name: "Checkout",
+    beforeEnter: checkLogin,
     component: () => import('../pages/Checkout.vue'),
   },
 

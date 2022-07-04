@@ -27,6 +27,10 @@ class OrderApiController extends Controller
 
     public function store(Request $request)
     {
+        // $cartItems = $request['cartItems'];
+        // return response()->json(['success' => $cartItems]);
+
+
         try {
             DB::transaction(function () use($request)
             {
@@ -43,44 +47,51 @@ class OrderApiController extends Controller
                 $order = new Order;
                 
                 $order->user_id = 1;
-                $order->order_status_id = 1;
                 $order->order_number = $orderNumber;
-                $order->shipping_address = $shipping_meta;
-                $order->billing_address = $billing_meta;
-                $order->grand_total = $request->grand_total;
-                $order->payment_method = $request->payment_method;
+                $order->shipping_meta = json_encode($shipping_meta);
+                $order->billing_meta = json_encode($billing_meta);
+                $order->total_amount = $request->total_amount;
 
                 $order->save();
 
-                $all_prices = $request->prices;
-                $product_names = $request->product_name;
-                $quantities = $request->quantity;
+                $cartItems = $request['cartItems'];
+                foreach ($cartItems as $cartItem) {
+                    $cartItems2[] = [
+                        'order_id' => $order->id,
+                        'product_id' => $cartItem['id'],
+                        'product_name' => $cartItem['name'],
+                        'price' => $cartItem['price'],
+                        'quantity' => $cartItem['quantity'],
+                    ];
+                    
+                }
+                
+                OrderDetails::insert($cartItems2);
 
-                $cartItems = [];
-
-                if(($all_prices !== NULL) && ($product_names !== NULL)){
-                    foreach ($all_prices as $index => $price) {
-                        $cartItems[] = [
-                            'order_id' => $order->id,
-                            'product_id' => $product_id[$index],
-                            'product_name' => $product_names[$index],
-                            'price' => $price,
-                            'quantity' => $quantities[$index],
-                        ];
-                    }
+                if($request->paymentMethodId == 1)
+                {
+                    $payment_meta = $request->only('mobileBankingType', 'mobileBankingAccountNumber', 'mobileBankingTransactionNumber','mobileBankingTransactionNumber');
+                }
+                elseif($request->paymentMethodId == 2)
+                {
+                    $payment_meta = $request->only('bankName', 'bankAccountNumber', 'bankBranchName');
+                }
+                elseif($request->paymentMethodId == 3)
+                {
+                    $payment_meta = $request->only('cardHolderName','cardNumber','cardExpiredDate','cardCvv');
+                }
+                elseif($request->paymentMethodId == 4)
+                {
+                    $payment_meta = $request->only('paymentMethodId');
                 }
 
-                    if (count($cartItems)){
-                        $orderDetails = new OrderDetails;
-                        $orderDetails->insert($cartItems);
-                    }
             });
 
         } catch (QueryException $e) {
 
-            return response()->json(['status' => $e->getMessage()]);
+            return response()->json(['errors' => $e->getMessage()]);
         }
 
-        return response()->json(['status' => 'Order Placed Successfully']);
+        return response()->json(['success' => 'Order Placed Successfully']);
     }
 }
