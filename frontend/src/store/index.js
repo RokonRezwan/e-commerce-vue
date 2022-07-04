@@ -7,19 +7,30 @@ export default createStore({
     products: [],
     categories: [],
     storeCart: JSON.parse(localStorage.getItem("cart")) || [],
+    authToken: JSON.parse(localStorage.getItem("authToken")) || null,
+    userData: JSON.parse(localStorage.getItem("userData")) || {},
   },
 
   getters: {
+
+    isAuthenticated: (state) => {
+      if (state.authToken) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+
+    getUserData: (state) => {
+      return state.userData;
+    },
+
     products: (state) => {
       return state.products;
     },
 
     categories: (state) => {
       return state.categories;
-    },
-
-    getCategoryWiseProducts: (state) => (name) => {
-      return state.products.find(product => product.category === 'laptops')
     },
 
     storeCart: (state) => {
@@ -46,6 +57,14 @@ export default createStore({
 
     SET_CATEGORIES(state, categories) {
       state.categories = categories;
+    },
+
+    SET_USER_DATA(state, userData) {
+      state.userData = userData;
+    },
+
+    SET_USER_TOKEN(state, token) {
+      state.userToken = token;
     },
 
     ADD_ITEM(state, id) {
@@ -77,8 +96,18 @@ export default createStore({
     },
 
     CLEAR_CART(state) {
+      localStorage.removeItem("cart");
       state.storeCart = [];
     },
+
+    LOGOUT(state) {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("userData");
+      state.userToken = '';
+      state.userData = [];
+      alert("Logout Successfully");
+    },
+
   },
 
   actions: {
@@ -91,7 +120,6 @@ export default createStore({
 
         const response = await axios.get('http://127.0.0.1:8000/api/api-products?page=' + page);
         commit("SET_PRODUCTS", response.data.products.data);
-        // console.log(response.data.products);
       } catch (error) {
         // console.log(error)
       }
@@ -101,10 +129,39 @@ export default createStore({
       try {
         const response = await axios.get("http://127.0.0.1:8000/api/api-categories");
         commit("SET_CATEGORIES", response.data.categories);
-        //console.log(response.data.categories);
       } catch (error) {
         // console.log(error)
       }
+    },
+
+    login({ commit }, data) {
+      axios.post('http://127.0.0.1:8000/api/login', data)
+        .then(response => {
+          localStorage.setItem("authToken", JSON.stringify(response.data.token));
+          localStorage.setItem("userData", JSON.stringify(response.data.user));
+          commit("SET_USER_DATA", response.data.user);
+          commit("SET_USER_TOKEN", response.data.token);
+           alert("Login Successfully");
+        })
+        .catch(error => {
+          console.log(error);
+        }
+        );
+    },
+
+    register({ commit }, data) {
+      axios.post('http://127.0.0.1:8000/api/register', data)
+        .then(response => {
+            localStorage.setItem("authToken", JSON.stringify(response.data.token));
+            localStorage.setItem("userData", JSON.stringify(response.data.user));
+            commit("SET_USER_DATA", response.data.user);
+            commit("SET_USER_TOKEN", response.data.token);
+            alert("Register Successfully");
+        })
+        .catch(error => {
+            console.log(error);
+        }
+        );
     },
 
     addItem(context, id) {
@@ -126,5 +183,10 @@ export default createStore({
       context.commit("CLEAR_CART");
       localStorage.setItem("cart", JSON.stringify(context.state.storeCart));
     },
+
+    logout(context) {
+      context.commit("LOGOUT");
+    }
+
   },
 });

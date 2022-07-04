@@ -1,67 +1,129 @@
 <template>
-    <div class="row">
-        <div class="col-12 d-flex justify-content-center">
-            <div class="card w-50">
-                <div class="card-header text-center pb-1"><h4>Login</h4></div>
-                <div class="card-body">
-                    <form @submit.prevent="onSubmitLoginForm">
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email address</label>
-                            <input type="text" class="form-control" id="email" v-model="email">
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" v-model="password">
-                        </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width:180px; font-size:20px">Login</button>
-                    </form>
-                </div>
+  <div class="row">
+    <div v-if="!isAuthenticated" class="col-12 d-flex justify-content-center">
+      <div class="card w-50">
+        <div class="card-header text-center pb-1"><h4>Login</h4></div>
+        <div class="card-body">
+          <div v-if="errors" class="row g-0">
+            <div class="col-12 alert alert-danger p-2" role="alert">
+              {{ errors }}
             </div>
+          </div>
+          <form @submit.prevent="onSubmitLoginForm">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email address</label>
+              <input
+                type="text"
+                class="form-control"
+                id="email"
+                v-model="email"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                v-model="password"
+              />
+            </div>
+            <div class="mb-3 form-check">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="exampleCheck1"
+              />
+              <label class="form-check-label" for="exampleCheck1"
+                >Check me out</label
+              >
+            </div>
+            <button
+              type="submit"
+              @click="$router.go(-1)"
+              class="btn btn-primary"
+              style="width: 180px; font-size: 20px"
+            >
+              Login
+            </button>
+          </form>
+          <div class="row g-0 mt-2">
+            <div class="col-12">
+              New User ?
+              <router-link to="/register" style="text-decoration: none"
+                >Register</router-link
+              >
+              here
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+    <div v-else class="col-12 text-center">
+      <div class="card">
+        <div class="card-header text-center pb-1"><h4>Welcome</h4></div>
+        <div class="card-body">
+          <div class="row g-0">
+            <div class="col-12">
+              <h4>You are logged in</h4>
+            </div>
+          </div>
+          <div class="row g-0">
+            <div class="col-12">
+              <button
+                class="btn btn-primary"
+                style="width: 180px; font-size: 20px"
+                @click="onLogout"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
 export default {
+  data() {
+    return {
+      email: "",
+      password: "",
+      errors: "",
+    };
+  },
 
-    data() {
-            return {
-                email: '',
-                password: ''
-            }
-        },
-    methods:{
-            async onSubmitLoginForm(){
-                if(this.email === '' || this.password === ''){
-                    alert('Email or Password can\'t be Empty');
-                    return;
-                }
+  computed: {
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
+    },
+  },
 
-                const url = 'https://dummyjson.com/auth/login'
-                const data = {
-                    username: this.email,
-                    password: this.password,
-                };
+  methods: {
+    onSubmitLoginForm() {
+      if (this.email === "" || this.password === "") {
+        alert("Email or Password can't be Empty");
+        return;
+      }
 
-                const headers = {'Content-Type': 'application/json'};
+      const data = {
+        email: this.email,
+        password: this.password,
+      };
 
-                await axios.post(url, JSON.stringify(data), {headers: headers})
-                .then((response) => {
-                    localStorage.setItem("authToken", JSON.stringify(response.data.token));
-                    localStorage.setItem("userData", JSON.stringify(response.data));
-                    //history.back();
-                    console.log(response.data)
-                })
-            }
-        }
+      this.$store.dispatch("login", data);
+    },
 
+    onLogout() {
+      this.$store.dispatch("logout");
+    },
+  },
 };
+
+// console.log(localStorage.getItem("authToken"));
 </script>
 
-<style>
-</style>
+<style></style>

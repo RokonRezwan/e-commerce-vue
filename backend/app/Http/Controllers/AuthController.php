@@ -16,12 +16,9 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
-            'confirm_password' => 'required|string|same:password|min:8',
+            'confirmPassword' => 'required|string|same:password|min:8',
         ]);
 
-        // if($validator->fails()){
-        //     return response()->json($validator->errors());
-        // }
         if ($validator->fails()) {
             return response()->json(['isSuccessStatus'=>false, 'errors'=>$validator->errors()]);
         }
@@ -29,7 +26,9 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'contact_number' => $request->contact_number,
+            'parmanent_address' => $request->parmanent_address,
          ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -41,8 +40,7 @@ class AuthController extends Controller
     {
         if (!Auth::attempt($request->only('email', 'password')))
         {
-            //return response()->json(['message' => 'Unauthorized'], 401);
-            return response()->json(['isSuccessStatus'=>false, 'message'=> 'Email and Password doesn\'t Match ! Please Check Email and Password !']);
+            return response()->json(['isSuccessStatus'=>false, 'errors'=> 'Email and Password doesn\'t Match ! Please Check Email and Password !']);
         }
 
         $user = User::where('email', $request['email'])->firstOrFail();
@@ -50,15 +48,5 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json(['user' => $user, 'token' => $token, 'token_type' => 'Bearer', ]);
-    }
-
-    // method for user logout and delete token
-    public function logout()
-    {
-       // auth()->user()->tokens()->delete();
-
-        return [
-            'message' => 'You have successfully logged out and the token was successfully deleted'
-        ];
     }
 }
