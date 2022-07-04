@@ -111,15 +111,10 @@ export default createStore({
   },
 
   actions: {
-    async fetchProducts({ commit }, page) {
+    async fetchProducts({ commit }) {
       try {
-
-        if (typeof page === 'undefined') {
-          page = 1;
-        }
-
-        const response = await axios.get('http://127.0.0.1:8000/api/api-products?page=' + page);
-        commit("SET_PRODUCTS", response.data.products.data);
+        const response = await axios.get('http://127.0.0.1:8000/api/api-products');
+        commit("SET_PRODUCTS", response.data.products);
       } catch (error) {
         // console.log(error)
       }
@@ -187,6 +182,5 @@ export default createStore({
     logout(context) {
       context.commit("LOGOUT");
     }
-
   },
 });
