@@ -34,7 +34,7 @@ class Product extends Model
 
     public function currentPrice()
     {
-        return $this->hasOne(ProductPrices::class)->with('priceTypes:id,name')->where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'));
+        return $this->hasOne111(ProductPrices::class)->with('priceTypes:id,name')->where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'));
     }
 
     public function orderDetails()

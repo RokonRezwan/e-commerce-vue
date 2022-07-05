@@ -7,11 +7,6 @@ export default createStore({
     products: [],
     categories: [],
     storeCart: JSON.parse(localStorage.getItem("cart")) || [],
-<<<<<<< Updated upstream
-  },
-
-  getters: {
-=======
     userToken: JSON.parse(localStorage.getItem("userToken")) || '',
     userData: JSON.parse(localStorage.getItem("userData")) || [],
     loginError: '',
@@ -38,21 +33,15 @@ export default createStore({
     },
 
     getUserData: (state) => {
-      console.log(state.userData)
-      return state.userData;
+        return state.userData;
     },
 
->>>>>>> Stashed changes
     products: (state) => {
       return state.products;
     },
 
     categories: (state) => {
       return state.categories;
-    },
-
-    getCategoryWiseProducts: (state) => (name) => {
-      return state.products.find(product => product.category === 'laptops')
     },
 
     storeCart: (state) => {
@@ -80,9 +69,6 @@ export default createStore({
     SET_CATEGORIES(state, categories) {
       state.categories = categories;
     },
-
-<<<<<<< Updated upstream
-=======
     SET_LOGIN_ERROR(state, loginError) {
       state.loginError = loginError;
     },
@@ -100,7 +86,6 @@ export default createStore({
       state.userToken = token;
     },
 
->>>>>>> Stashed changes
     ADD_ITEM(state, id) {
       const record = state.storeCart.find((p) => p.id === id);
       const item = state.products.find((p) => p.id === id);
@@ -130,20 +115,16 @@ export default createStore({
     },
 
     CLEAR_CART(state) {
+      localStorage.removeItem("cart");
       state.storeCart = [];
     },
-<<<<<<< Updated upstream
-=======
 
     LOGOUT(state) {
       localStorage.removeItem("userToken");
-      localStorage.removeItem("userData");
       state.userToken = '';
       state.userData = [];
       alert("Logout Successfully");
     },
-
->>>>>>> Stashed changes
   },
 
   actions: {
@@ -165,8 +146,6 @@ export default createStore({
       }
     },
 
-<<<<<<< Updated upstream
-=======
     login({ commit }, data) {
       axios.post('http://127.0.0.1:8000/api/login', data)
         .then(response => {
@@ -203,6 +182,7 @@ export default createStore({
             commit("SET_USER_DATA", JSON.stringify(response.data.user));
             alert("Register Successfully");
           }
+
         })
         .catch(error => {
             console.log(error);
@@ -210,7 +190,6 @@ export default createStore({
         );
     },
 
->>>>>>> Stashed changes
     addItem(context, id) {
       context.commit("ADD_ITEM", id);
       localStorage.setItem("cart", JSON.stringify(context.state.storeCart));
@@ -230,6 +209,9 @@ export default createStore({
       context.commit("CLEAR_CART");
       localStorage.setItem("cart", JSON.stringify(context.state.storeCart));
     },
-    
+
+    logout(context) {
+      context.commit("LOGOUT");
+    }
   },
 });

@@ -21,7 +21,8 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->tinyInteger('user_type')->default(0);
-            $table->text('user_address')->nullable();
+            $table->string('contact_number', 15)->nullable();
+            $table->text('parmanent_address')->nullable();
             $table->timestamps();
         });
     }

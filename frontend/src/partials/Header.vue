@@ -4,22 +4,14 @@
             <nav class="navbar navbar-expand g-0">
                 <div class="container-fluid g-0 px-1 py-2">
                     <span class="ps-2 d-none d-lg-block">Welcome to Win Win SP | Largest Bangladeshi E-Commerce</span>
-<<<<<<< Updated upstream
-                    <ul class="navbar-nav ms-auto g-0">
-                    <li class="nav-item">
-                        <router-link to="/login" class="nav-link">Login</router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link to="/register" class="nav-link">Register</router-link>
-                    </li>
-                    </ul>
-=======
+
                         <ul v-if="isLoggedIn" class="navbar-nav ms-auto g-0">
                             <li class="nav-item">
                                 <a href="#" class="nav-link">{{ userName }}</a>
                             </li>
                             <li class="nav-item">
                                 <a href="#" @click="logout" class="nav-link">Logout</a>
+
                             </li>
                         </ul>
                         <ul v-else class="navbar-nav ms-auto g-0">
@@ -30,7 +22,7 @@
                                 <router-link to="/register" class="nav-link">Register</router-link>
                             </li>
                         </ul>
->>>>>>> Stashed changes
+
                 </div>
             </nav>
         </div>
@@ -71,8 +63,6 @@ export default {
     computed: {
         cartCount() {
             return this.$store.getters.storeCart.length;
-<<<<<<< Updated upstream
-=======
         },
 
         isLoggedIn() {
@@ -89,9 +79,9 @@ export default {
     methods: {
         logout() {
             this.$store.dispatch('logout')
->>>>>>> Stashed changes
         }
-    }
+    },
+
 };
 
 </script>

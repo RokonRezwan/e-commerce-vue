@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderDetails;
 use Illuminate\Http\Request;
+use App\Models\PaymentDetails;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\QueryException;
@@ -27,60 +28,91 @@ class OrderApiController extends Controller
 
     public function store(Request $request)
     {
+        // $cartItems = $request['cartItems'];
+        // return response()->json(['success' => $cartItems]);
+
+
         try {
             DB::transaction(function () use($request)
             {
                 $shipping_meta = $request->only('shippingFullName', 'shippingContactNumber', 'shippingAddress');
                 $billing_meta = $request->only('billingFullName', 'billingContactNumber', 'billingAddress');
 
-                $orderNumber = random_int(100000,999999);
-
-                while(Order::where('order_number', $orderNumber)->exists())
-                {
-                    $orderNumber++;
-                }
+                $orderNumber = $this->_generateRandomOrderNumber();
 
                 $order = new Order;
                 
                 $order->user_id = 1;
-                $order->order_status_id = 1;
                 $order->order_number = $orderNumber;
-                $order->shipping_address = $shipping_meta;
-                $order->billing_address = $billing_meta;
-                $order->grand_total = $request->grand_total;
-                $order->payment_method = $request->payment_method;
+                $order->shipping_meta = json_encode($shipping_meta);
+                $order->billing_meta = json_encode($billing_meta);
+                $order->total_amount = $request->total_amount;
 
                 $order->save();
 
-                $all_prices = $request->prices;
-                $product_names = $request->product_name;
-                $quantities = $request->quantity;
+                $cartItems = $request['cartItems'];
+                foreach ($cartItems as $cartItem) {
+                    $cartItems2[] = [
+                        'order_id' => $order->id,
+                        'product_id' => $cartItem['id'],
+                        'product_name' => $cartItem['name'],
+                        'price' => $cartItem['price'],
+                        'quantity' => $cartItem['quantity'],
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s')
+                    ];
+                    
+                }
+                
+                OrderDetails::insert($cartItems2);
 
-                $cartItems = [];
+                $paymentDetails = new PaymentDetails;
 
-                if(($all_prices !== NULL) && ($product_names !== NULL)){
-                    foreach ($all_prices as $index => $price) {
-                        $cartItems[] = [
-                            'order_id' => $order->id,
-                            'product_id' => $product_id[$index],
-                            'product_name' => $product_names[$index],
-                            'price' => $price,
-                            'quantity' => $quantities[$index],
-                        ];
-                    }
+                $paymentDetails->order_id = $order->id;
+                $paymentDetails->payment_method_id = $request->paymentMethodId;
+
+                if($request->paymentMethodId == 1)
+                {
+                    $payment_meta = $request->only('mobileBankingType', 'mobileBankingAccountNumber', 'mobileBankingTransactionNumber');
+                }
+                elseif($request->paymentMethodId == 2)
+                {
+                    $payment_meta = $request->only('bankName', 'bankAccountNumber', 'bankBranchName');
+                }
+                elseif($request->paymentMethodId == 3)
+                {
+                    $payment_meta = $request->only('cardHolderName','cardNumber','cardExpiredDate','cardCvv');
+                }
+                elseif($request->paymentMethodId == 4)
+                {
+                    $payment_meta = $request->only('paypalEmail','paypalAmount');
+                }
+                elseif($request->paymentMethodId == 5)
+                {
+                    $payment_meta = $request->only('cashOnDeliveryAmount');
                 }
 
-                    if (count($cartItems)){
-                        $orderDetails = new OrderDetails;
-                        $orderDetails->insert($cartItems);
-                    }
+                $paymentDetails->payment_meta = json_encode($payment_meta);
+
+                $paymentDetails->save();
+
             });
 
         } catch (QueryException $e) {
 
-            return response()->json(['status' => $e->getMessage()]);
+            return response()->json(['errors' => $e->getMessage()]);
         }
 
-        return response()->json(['status' => 'Order Placed Successfully']);
+        return response()->json(['success' => 'Order Placed Successfully']);
+    }
+
+    private function _generateRandomOrderNumber(){
+
+        $date = date("Ymd");
+        $randomNumber = random_int(100000,999999);
+
+        $uniqueNumber = $date.$randomNumber;
+
+        return $uniqueNumber;
     }
 }

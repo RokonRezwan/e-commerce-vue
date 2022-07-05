@@ -1,9 +1,4 @@
-<<<<<<< Updated upstream
 import {createRouter, createWebHistory} from 'vue-router'
-=======
-import { createRouter, createWebHistory } from "vue-router";
-import store from "../store";
->>>>>>> Stashed changes
 
 const routes = [
   {
@@ -41,11 +36,7 @@ const routes = [
   {
     path: "/checkout",
     name: "Checkout",
-<<<<<<< Updated upstream
     component: () => import('../pages/Checkout.vue'),
-=======
-    component: () => import("../pages/Checkout.vue"),
->>>>>>> Stashed changes
   },
 
   {
