@@ -1,6 +1,13 @@
 <template>
-    <div class="container px-3">
+    <div class="container px-3" v-if="isLoggedIn">
+        <div v-if="succMessage" class="row g-0">
+            <div class="col-12 text-center">
+                <h3  class="text-success">{{ succMessage }}</h3>
+            </div>
+        </div>
+
         <h3>Checkout ( {{ $store.getters.cartCount }} )</h3>
+
         <div class="row g-0">
             <div class="col-md-8">
                 <CartItem />
@@ -198,13 +205,14 @@ export default {
     name: 'Checkout',
     data() {
         return {
+            succMessage: '',
             cartCount: 0,
             paymentMethods: [],
             total_amount: 0,
 
-            shippingFullName: '',
-            shippingContactNumber: '',
-            shippingAddress: '',
+            shippingFullName: this.$store.getters.getUserData.name || '',
+            shippingContactNumber: this.$store.getters.getUserData.contact_number || '',
+            shippingAddress: this.$store.getters.getUserData.parmanent_address || '',
 
             billingFullName: '',
             billingContactNumber: '',
@@ -238,7 +246,7 @@ export default {
     components: {
         CartItem
     },
-
+    
     mounted() {
         
         axios.get('http://127.0.0.1:8000/api/api-payment-methods')
@@ -250,6 +258,17 @@ export default {
         })   
     },
 
+    computed: {
+        isLoggedIn: function () {
+            if(this.$store.getters.isLoggedIn){
+                return true;
+            }
+            else{
+                this.$router.push('/login')
+            }
+        }
+    },
+    
     methods: {
         changePaymentMethod(event) {
             let paymentMethod = event.target.value;
@@ -270,10 +289,12 @@ export default {
                 this.billingContactNumber = ''
                 this.billingAddress = '';
             }
+       }
+       
        },
      
         confirmOrder(){
-
+        
             const data={
                 cartItems: this.$store.getters.storeCart,
                 total_amount: this.$store.getters.totalAmount,
@@ -291,6 +312,7 @@ export default {
                 mobileBankingType: this.mobileBankingType,
                 mobileBankingAccountNumber: this.mobileBankingAccountNumber,
                 mobileBankingTransactionNumber: this.mobileBankingTransactionNumber,
+
                 bankName: this.bankName,
                 bankAccountNumber: this.bankAccountNumber,
                 bankBranchName: this.bankBranchName,
@@ -301,17 +323,15 @@ export default {
                 paypalEmail: this.paypalEmail,
                 paypalAmount: this.paypalAmount,
                 cashOnDeliveryAmount: this.cashOnDeliveryAmount,
-                
+              
             }
 
             axios.post('http://127.0.0.1:8000/api/api-orders', data).then(response => {
                 if(response.data.success){
                     console.log(response.data.success);
-                    localStorage.removeItem('cart');
-                   // this.$router.push('/products');
-                    this.$router.go({ name: 'Products' })
-                   // $router.push({ name: 'Companies' })
-                   // window.location.reload();
+                    this.$store.dispatch("clearCart");
+                    this.succMessage = response.data.success
+                     setTimeout(() => this.succMessage = '', 5000);
                 }
                 else {
                     console.log(response.data.errors);

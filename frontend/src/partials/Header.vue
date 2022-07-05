@@ -4,9 +4,14 @@
             <nav class="navbar navbar-expand g-0">
                 <div class="container-fluid g-0 px-1 py-2">
                     <span class="ps-2 d-none d-lg-block">Welcome to Win Win SP | Largest Bangladeshi E-Commerce</span>
-                        <ul v-if="isAuthenticated" class="navbar-nav ms-auto g-0">
+
+                        <ul v-if="isLoggedIn" class="navbar-nav ms-auto g-0">
                             <li class="nav-item">
-                                <a href="" @click="logout" class="nav-link">Logout</a>
+                                <a href="#" class="nav-link">{{ userName }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" @click="logout" class="nav-link">Logout</a>
+
                             </li>
                         </ul>
                         <ul v-else class="navbar-nav ms-auto g-0">
@@ -17,6 +22,7 @@
                                 <router-link to="/register" class="nav-link">Register</router-link>
                             </li>
                         </ul>
+
                 </div>
             </nav>
         </div>
@@ -59,16 +65,23 @@ export default {
             return this.$store.getters.storeCart.length;
         },
 
-        isAuthenticated() {
-            return this.$store.getters.isAuthenticated;
+        isLoggedIn() {
+            return this.$store.getters.isLoggedIn;
+        },
+
+        userName(){
+            return this.$store.getters.getUserData.name;
         }
+
     },
+
+    
     methods: {
         logout() {
-            this.$store.dispatch('logout');
-           // alert('Logout Successfully');
+            this.$store.dispatch('logout')
         }
-    }
+    },
+
 };
 
 </script>

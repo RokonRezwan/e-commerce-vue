@@ -7,22 +7,33 @@ export default createStore({
     products: [],
     categories: [],
     storeCart: JSON.parse(localStorage.getItem("cart")) || [],
-    authToken: JSON.parse(localStorage.getItem("authToken")) || null,
-    userData: JSON.parse(localStorage.getItem("userData")) || {},
+    userToken: JSON.parse(localStorage.getItem("userToken")) || '',
+    userData: JSON.parse(localStorage.getItem("userData")) || [],
+    loginError: '',
+    registerErrors:  []
   },
 
   getters: {
 
-    isAuthenticated: (state) => {
-      if (state.authToken) {
+    getLoginError: (state) => {
+      return state.loginError;
+    },
+
+    getregisterErrors: (state) => {
+      return state.registerErrors;
+    },
+
+    isLoggedIn: (state) => {
+      if(state.userToken){
         return true;
-      } else {
+      }
+      else{
         return false;
       }
     },
 
     getUserData: (state) => {
-      return state.userData;
+        return state.userData;
     },
 
     products: (state) => {
@@ -58,7 +69,15 @@ export default createStore({
     SET_CATEGORIES(state, categories) {
       state.categories = categories;
     },
+    SET_LOGIN_ERROR(state, loginError) {
+      state.loginError = loginError;
+    },
 
+    SET_REGISTER_ERRORS(state, registerErrors) {
+      console.log(registerErrors)
+      state.registerErrors = registerErrors;
+    },
+    
     SET_USER_DATA(state, userData) {
       state.userData = userData;
     },
@@ -101,13 +120,11 @@ export default createStore({
     },
 
     LOGOUT(state) {
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("userData");
+      localStorage.removeItem("userToken");
       state.userToken = '';
       state.userData = [];
       alert("Logout Successfully");
     },
-
   },
 
   actions: {
@@ -132,11 +149,18 @@ export default createStore({
     login({ commit }, data) {
       axios.post('http://127.0.0.1:8000/api/login', data)
         .then(response => {
-          localStorage.setItem("authToken", JSON.stringify(response.data.token));
-          localStorage.setItem("userData", JSON.stringify(response.data.user));
-          commit("SET_USER_DATA", response.data.user);
-          commit("SET_USER_TOKEN", response.data.token);
-           alert("Login Successfully");
+          if(response.data.isSuccessStatus === false){
+            commit("SET_LOGIN_ERROR", JSON.stringify(response.data.errors))
+            console.log(response.data.errors);
+          }
+          else{
+            localStorage.setItem("userToken", JSON.stringify(response.data.token));
+            localStorage.setItem("userData", JSON.stringify(response.data.user));
+            commit("SET_USER_TOKEN", JSON.stringify(response.data.token));
+            commit("SET_USER_DATA", JSON.stringify(response.data.user));
+           // alert("Login Successfully");
+            //console.log(response.data);
+          }
         })
         .catch(error => {
           console.log(error);
@@ -147,11 +171,18 @@ export default createStore({
     register({ commit }, data) {
       axios.post('http://127.0.0.1:8000/api/register', data)
         .then(response => {
-            localStorage.setItem("authToken", JSON.stringify(response.data.token));
+          if(response.data.isSuccessStatus === false){
+            commit("SET_REGISTER_ERRORS", JSON.stringify(response.data.errors))
+            console.log(response.data.errors);
+          }
+          else{
+            localStorage.setItem("userToken", JSON.stringify(response.data.token));
             localStorage.setItem("userData", JSON.stringify(response.data.user));
-            commit("SET_USER_DATA", response.data.user);
-            commit("SET_USER_TOKEN", response.data.token);
+            commit("SET_USER_TOKEN", JSON.stringify(response.data.token));
+            commit("SET_USER_DATA", JSON.stringify(response.data.user));
             alert("Register Successfully");
+          }
+
         })
         .catch(error => {
             console.log(error);
