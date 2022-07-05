@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderDetails;
 use Illuminate\Http\Request;
+use App\Models\PaymentDetails;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\QueryException;
@@ -68,9 +69,14 @@ class OrderApiController extends Controller
                 
                 OrderDetails::insert($cartItems2);
 
+                $paymentDetails = new PaymentDetails;
+
+                $paymentDetails->order_id = $order->id;
+                $paymentDetails->payment_method_id = $request->paymentMethodId;
+
                 if($request->paymentMethodId == 1)
                 {
-                    $payment_meta = $request->only('mobileBankingType', 'mobileBankingAccountNumber', 'mobileBankingTransactionNumber','mobileBankingTransactionNumber');
+                    $payment_meta = $request->only('mobileBankingType', 'mobileBankingAccountNumber', 'mobileBankingTransactionNumber');
                 }
                 elseif($request->paymentMethodId == 2)
                 {
@@ -82,8 +88,12 @@ class OrderApiController extends Controller
                 }
                 elseif($request->paymentMethodId == 4)
                 {
-                    $payment_meta = $request->only('paymentMethodId');
+                    $payment_meta = $request->only('paypalEmail','paypalAmount');
                 }
+
+                $paymentDetails->payment_meta = json_encode($payment_meta);
+
+                $paymentDetails->save();
 
             });
 

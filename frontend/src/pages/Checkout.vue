@@ -157,12 +157,12 @@
                                         <div class="mb-2">
                                             <label for="paypal-email" class="form-label">Paypal Email</label>
                                             <input type="number" id="paypal-email" name="paypal-email"
-                                                class="form-control" placeholder="Paypal Email" />
+                                                class="form-control" placeholder="Paypal Email" v-model="paypalEmail" />
                                         </div>
                                         <div class="mb-2">
                                             <label for="paypal-amount" class="form-label">Paypal Amount</label>
                                             <input type="number" id="paypal-amount" name="paypal-amount"
-                                                class="form-control" placeholder="Paypal Amount" />
+                                                class="form-control" placeholder="Paypal Amount" v-model="paypalAmount"/>
                                         </div>
                                     </div>
                                 </div>
@@ -203,7 +203,22 @@ export default {
 
             paymentMethod: '',
 
+            mobileBankingType: '',
+            mobileBankingAccountNumber: '',
+            mobileBankingTransactionNumber: '',
+            
+            bankName: '',
+            bankAccountNumber: '',
+            bankBranchName: '',
 
+            cardHolderName: '',
+            cardNumber: '',
+            cardExpiredDate: '',
+            cardCvv: '',
+
+            paypalEmail: '',
+            paypalAmount: '',
+            
             showPaymentForm: false,
             sameAddress: false
         }
@@ -271,8 +286,10 @@ export default {
                 cardHolderName: this.cardHolderName,
                 cardNumber: this.cardNumber,
                 cardExpiredDate: this.cardExpiredDate,
-                cardCvv: this.cardCvv,                               
-
+                cardCvv: this.cardCvv,
+                paypalEmail: this.paypalEmail,
+                paypalAmount: this.paypalAmount,
+                
             }
 
             axios.post('http://127.0.0.1:8000/api/api-orders', data).then(response => {
