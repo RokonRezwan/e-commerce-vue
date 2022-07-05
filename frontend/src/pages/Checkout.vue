@@ -12,6 +12,7 @@
             <div class="col-md-8">
                 <CartItem />
             </div>
+
             <div class="col-md-4">
                 <div class="container ms-2">
 
@@ -77,7 +78,6 @@
 
                         </div>
                     </div>
-
 
                     <div class="card mt-3">
                         <div class="card-header">
@@ -194,6 +194,7 @@
 
                 </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -264,7 +265,7 @@ export default {
                 return true;
             }
             else{
-                this.$router.push('/login')
+               // this.$router.push('/login')
             }
         }
     },
@@ -289,9 +290,8 @@ export default {
                 this.billingContactNumber = ''
                 this.billingAddress = '';
             }
-       }
-       
        },
+       
      
         confirmOrder(){
         

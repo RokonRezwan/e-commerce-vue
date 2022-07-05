@@ -21,7 +21,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div>  
 
     <div v-else class="col-12 d-flex justify-content-center">
       <div class="card w-50">
@@ -60,7 +60,8 @@
           </div>
         </div>
     </div>
-  </div>
+    </div>
+  </div>  
   
 </template>
 

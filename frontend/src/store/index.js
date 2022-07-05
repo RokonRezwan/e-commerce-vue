@@ -2,19 +2,20 @@ import { createStore } from "vuex";
 
 import axios from "axios";
 
+const apiApplicationPath = "http://127.0.0.1:8000/api";
+
 export default createStore({
   state: {
     products: [],
     categories: [],
     storeCart: JSON.parse(localStorage.getItem("cart")) || [],
-    userToken: JSON.parse(localStorage.getItem("userToken")) || '',
+    userToken: JSON.parse(localStorage.getItem("userToken")) || "",
     userData: JSON.parse(localStorage.getItem("userData")) || [],
-    loginError: '',
-    registerErrors:  []
+    loginError: "",
+    registerErrors: "",
   },
 
   getters: {
-
     getLoginError: (state) => {
       return state.loginError;
     },
@@ -24,16 +25,16 @@ export default createStore({
     },
 
     isLoggedIn: (state) => {
-      if(state.userToken){
+      if (state.userToken) {
         return true;
-      }
-      else{
+      } else {
         return false;
       }
     },
 
     getUserData: (state) => {
-        return state.userData;
+      console.log(state.userData);
+      return state.userData;
     },
 
     products: (state) => {
@@ -74,10 +75,10 @@ export default createStore({
     },
 
     SET_REGISTER_ERRORS(state, registerErrors) {
-      console.log(registerErrors)
+      console.log(registerErrors);
       state.registerErrors = registerErrors;
     },
-    
+
     SET_USER_DATA(state, userData) {
       state.userData = userData;
     },
@@ -121,7 +122,7 @@ export default createStore({
 
     LOGOUT(state) {
       localStorage.removeItem("userToken");
-      state.userToken = '';
+      state.userToken = "";
       state.userData = [];
       alert("Logout Successfully");
     },
@@ -130,7 +131,7 @@ export default createStore({
   actions: {
     async fetchProducts({ commit }) {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/api-products');
+        const response = await axios.get(apiApplicationPath + "/api-products");
         commit("SET_PRODUCTS", response.data.products);
       } catch (error) {
         // console.log(error)
@@ -139,7 +140,9 @@ export default createStore({
 
     async fetchCategories({ commit }) {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/api-categories");
+        const response = await axios.get(
+          apiApplicationPath + "/api-categories"
+        );
         commit("SET_CATEGORIES", response.data.categories);
       } catch (error) {
         // console.log(error)
@@ -147,47 +150,56 @@ export default createStore({
     },
 
     login({ commit }, data) {
-      axios.post('http://127.0.0.1:8000/api/login', data)
-        .then(response => {
-          if(response.data.isSuccessStatus === false){
-            commit("SET_LOGIN_ERROR", JSON.stringify(response.data.errors))
+      axios
+        .post(apiApplicationPath + "/login", data)
+        .then((response) => {
+          if (response.data.isSuccessStatus === false) {
+            commit("SET_LOGIN_ERROR", JSON.stringify(response.data.errors));
             console.log(response.data.errors);
-          }
-          else{
-            localStorage.setItem("userToken", JSON.stringify(response.data.token));
-            localStorage.setItem("userData", JSON.stringify(response.data.user));
+          } else {
+            localStorage.setItem(
+              "userToken",
+              JSON.stringify(response.data.token)
+            );
+            localStorage.setItem(
+              "userData",
+              JSON.stringify(response.data.user)
+            );
             commit("SET_USER_TOKEN", JSON.stringify(response.data.token));
             commit("SET_USER_DATA", JSON.stringify(response.data.user));
-           // alert("Login Successfully");
+            // alert("Login Successfully");
             //console.log(response.data);
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
-        }
-        );
+        });
     },
 
     register({ commit }, data) {
-      axios.post('http://127.0.0.1:8000/api/register', data)
-        .then(response => {
-          if(response.data.isSuccessStatus === false){
-            commit("SET_REGISTER_ERRORS", JSON.stringify(response.data.errors))
+      axios
+        .post(apiApplicationPath + "/register", data)
+        .then((response) => {
+          if (response.data.isSuccessStatus === false) {
+            commit("SET_REGISTER_ERRORS", JSON.stringify(response.data.errors));
             console.log(response.data.errors);
-          }
-          else{
-            localStorage.setItem("userToken", JSON.stringify(response.data.token));
-            localStorage.setItem("userData", JSON.stringify(response.data.user));
+          } else {
+            localStorage.setItem(
+              "userToken",
+              JSON.stringify(response.data.token)
+            );
+            localStorage.setItem(
+              "userData",
+              JSON.stringify(response.data.user)
+            );
             commit("SET_USER_TOKEN", JSON.stringify(response.data.token));
             commit("SET_USER_DATA", JSON.stringify(response.data.user));
             alert("Register Successfully");
           }
-
         })
-        .catch(error => {
-            console.log(error);
-        }
-        );
+        .catch((error) => {
+          console.log(error);
+        });
     },
 
     addItem(context, id) {
@@ -212,6 +224,6 @@ export default createStore({
 
     logout(context) {
       context.commit("LOGOUT");
-    }
+    },
   },
 });

@@ -47,9 +47,11 @@ class ProductController extends Controller
 
                     $product = new Product; 
 
-                    $product->name = $request->name;
+                    $name =  $request->name;
+                    
+                    $product->name = $name;
                     $product->category_id = $request->category_id;
-                    $product->slug = Str::slug($request->name);
+                    $product->slug = Str::slug($name);
                     $product->image = $imageName;
                     $product->description = $request->description;
 
@@ -60,25 +62,25 @@ class ProductController extends Controller
                     $start_date = $request->start_date;
                     $end_date = $request->end_date;
 
-                    $values = [];
-                    $cd=date('Y-m-d H:i:s');
+                    $productPricesToInsert = [];
+                    $createDate = date('Y-m-d H:i:s');
 
                     if(($all_prices !== NULL) && ($price_type_ids !== NULL)){
                         foreach ($all_prices as $index => $amount) {
-                            $values[] = [
+                            $productPricesToInsert[] = [
                                 'product_id' => $product->id,
                                 'amount' => $amount,
                                 'price_type_id' => $price_type_ids[$index],
                                 'start_date' => $start_date[$index],
                                 'end_date' => $end_date[$index],
-                                'created_at' => $cd,
-                                'updated_at' => $cd,
+                                'created_at' => $createDate,
+                                'updated_at' => $createDate,
                             ];
                         }
                     }
 
                     if ( ($amount !== NULL) && ($price_type_ids[$index] !== NULL) ){
-                        $product->prices()->insert($values);
+                        $product->prices()->insert($productPricesToInsert);
                     }
                 });
 
