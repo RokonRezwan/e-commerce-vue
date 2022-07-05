@@ -1,6 +1,13 @@
 <template>
-    <div class="container px-3">
+    <div class="container px-3" v-if="isLoggedIn">
+        <div v-if="succMessage" class="row g-0">
+            <div class="col-12 text-center">
+                <h3  class="text-success">{{ succMessage }}</h3>
+            </div>
+        </div>
+
         <h3>Checkout ( {{ $store.getters.cartCount }} )</h3>
+
         <div class="row g-0">
             <div class="col-md-8">
                 <CartItem />
@@ -192,17 +199,23 @@ export default {
     name: 'Checkout',
     data() {
         return {
+            succMessage: '',
             cartCount: 0,
 
-            shippingFullName: '',
-            shippingContactNumber: '',
-            shippingAddress: '',
+            shippingFullName: this.$store.getters.getUserData.name || '',
+            shippingContactNumber: this.$store.getters.getUserData.contact_number || '',
+            shippingAddress: this.$store.getters.getUserData.parmanent_address || '',
 
             billingFullName: '',
             billingContactNumber: '',
             billingAddress: '',
 
+<<<<<<< Updated upstream
             PaymentMethod: '',
+=======
+            paymentMethod: '',
+
+>>>>>>> Stashed changes
             showPaymentForm: false,
             sameAddress: false
         }
@@ -212,6 +225,31 @@ export default {
         CartItem
     },
 
+<<<<<<< Updated upstream
+=======
+    mounted() {
+        
+        axios.get('http://127.0.0.1:8000/api/api-payment-methods')
+        .then(response => {
+            this.paymentMethods = response.data.paymentMethods;
+        })
+        .catch(error => {
+            console.log(error);
+        })   
+    },
+
+    computed: {
+        isLoggedIn: function () {
+            if(this.$store.getters.isLoggedIn){
+                return true;
+            }
+            else{
+                this.$router.push('/login')
+            }
+        }
+    },
+
+>>>>>>> Stashed changes
     methods: {
         changePaymentMethod(event) {
             let paymentMethod = event.target.value;
@@ -232,9 +270,60 @@ export default {
                 this.billingContactNumber = ''
                 this.billingAddress = '';
             }
+<<<<<<< Updated upstream
        }
 
         
+=======
+       },
+     
+        confirmOrder(){
+
+            const data={
+                cartItems: this.$store.getters.storeCart,
+                total_amount: this.$store.getters.totalAmount,
+
+                shippingFullName: this.shippingFullName,
+                shippingContactNumber: this.shippingContactNumber,
+                shippingAddress: this.shippingAddress,
+
+                billingFullName: this.billingFullName,
+                billingContactNumber: this.billingContactNumber,
+                billingAddress: this.billingAddress,
+
+                paymentMethodId: this.paymentMethod,
+
+                mobileBankingType: this.mobileBankingType,
+                mobileBankingAccountNumber: this.mobileBankingAccountNumber,
+                mobileBankingTransactionNumber: this.mobileBankingTransactionNumber,
+
+                bankName: this.bankName,
+                bankAccountNumber: this.bankAccountNumber,
+                bankBranchName: this.bankBranchName,
+
+                cardHolderName: this.cardHolderName,
+                cardNumber: this.cardNumber,
+                cardExpiredDate: this.cardExpiredDate,
+                cardCvv: this.cardCvv,                               
+
+            }
+
+            axios.post('http://127.0.0.1:8000/api/api-orders', data).then(response => {
+                if(response.data.success){
+                    console.log(response.data.success);
+                    this.$store.dispatch("clearCart");
+                    this.succMessage = response.data.success
+                     setTimeout(() => this.succMessage = '', 5000);
+                }
+                else {
+                    console.log(response.data.errors);
+                }
+            }).catch(error => {
+                console.log(error);
+            });
+        }
+     
+>>>>>>> Stashed changes
     }
 
 }

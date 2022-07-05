@@ -7,9 +7,42 @@ export default createStore({
     products: [],
     categories: [],
     storeCart: JSON.parse(localStorage.getItem("cart")) || [],
+<<<<<<< Updated upstream
   },
 
   getters: {
+=======
+    userToken: JSON.parse(localStorage.getItem("userToken")) || '',
+    userData: JSON.parse(localStorage.getItem("userData")) || [],
+    loginError: '',
+    registerErrors:  []
+  },
+
+  getters: {
+
+    getLoginError: (state) => {
+      return state.loginError;
+    },
+
+    getregisterErrors: (state) => {
+      return state.registerErrors;
+    },
+
+    isLoggedIn: (state) => {
+      if(state.userToken){
+        return true;
+      }
+      else{
+        return false;
+      }
+    },
+
+    getUserData: (state) => {
+      console.log(state.userData)
+      return state.userData;
+    },
+
+>>>>>>> Stashed changes
     products: (state) => {
       return state.products;
     },
@@ -48,6 +81,26 @@ export default createStore({
       state.categories = categories;
     },
 
+<<<<<<< Updated upstream
+=======
+    SET_LOGIN_ERROR(state, loginError) {
+      state.loginError = loginError;
+    },
+
+    SET_REGISTER_ERRORS(state, registerErrors) {
+      console.log(registerErrors)
+      state.registerErrors = registerErrors;
+    },
+    
+    SET_USER_DATA(state, userData) {
+      state.userData = userData;
+    },
+
+    SET_USER_TOKEN(state, token) {
+      state.userToken = token;
+    },
+
+>>>>>>> Stashed changes
     ADD_ITEM(state, id) {
       const record = state.storeCart.find((p) => p.id === id);
       const item = state.products.find((p) => p.id === id);
@@ -79,6 +132,18 @@ export default createStore({
     CLEAR_CART(state) {
       state.storeCart = [];
     },
+<<<<<<< Updated upstream
+=======
+
+    LOGOUT(state) {
+      localStorage.removeItem("userToken");
+      localStorage.removeItem("userData");
+      state.userToken = '';
+      state.userData = [];
+      alert("Logout Successfully");
+    },
+
+>>>>>>> Stashed changes
   },
 
   actions: {
@@ -100,6 +165,52 @@ export default createStore({
       }
     },
 
+<<<<<<< Updated upstream
+=======
+    login({ commit }, data) {
+      axios.post('http://127.0.0.1:8000/api/login', data)
+        .then(response => {
+          if(response.data.isSuccessStatus === false){
+            commit("SET_LOGIN_ERROR", JSON.stringify(response.data.errors))
+            console.log(response.data.errors);
+          }
+          else{
+            localStorage.setItem("userToken", JSON.stringify(response.data.token));
+            localStorage.setItem("userData", JSON.stringify(response.data.user));
+            commit("SET_USER_TOKEN", JSON.stringify(response.data.token));
+            commit("SET_USER_DATA", JSON.stringify(response.data.user));
+           // alert("Login Successfully");
+            //console.log(response.data);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        }
+        );
+    },
+
+    register({ commit }, data) {
+      axios.post('http://127.0.0.1:8000/api/register', data)
+        .then(response => {
+          if(response.data.isSuccessStatus === false){
+            commit("SET_REGISTER_ERRORS", JSON.stringify(response.data.errors))
+            console.log(response.data.errors);
+          }
+          else{
+            localStorage.setItem("userToken", JSON.stringify(response.data.token));
+            localStorage.setItem("userData", JSON.stringify(response.data.user));
+            commit("SET_USER_TOKEN", JSON.stringify(response.data.token));
+            commit("SET_USER_DATA", JSON.stringify(response.data.user));
+            alert("Register Successfully");
+          }
+        })
+        .catch(error => {
+            console.log(error);
+        }
+        );
+    },
+
+>>>>>>> Stashed changes
     addItem(context, id) {
       context.commit("ADD_ITEM", id);
       localStorage.setItem("cart", JSON.stringify(context.state.storeCart));
