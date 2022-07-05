@@ -38,12 +38,7 @@ class OrderApiController extends Controller
                 $shipping_meta = $request->only('shippingFullName', 'shippingContactNumber', 'shippingAddress');
                 $billing_meta = $request->only('billingFullName', 'billingContactNumber', 'billingAddress');
 
-                $orderNumber = random_int(100000,999999);
-
-                while(Order::where('order_number', $orderNumber)->exists())
-                {
-                    $orderNumber++;
-                }
+                $orderNumber = $this->_generateRandomOrderNumber();
 
                 $order = new Order;
                 
@@ -63,6 +58,8 @@ class OrderApiController extends Controller
                         'product_name' => $cartItem['name'],
                         'price' => $cartItem['price'],
                         'quantity' => $cartItem['quantity'],
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s')
                     ];
                     
                 }
@@ -90,6 +87,10 @@ class OrderApiController extends Controller
                 {
                     $payment_meta = $request->only('paypalEmail','paypalAmount');
                 }
+                elseif($request->paymentMethodId == 5)
+                {
+                    $payment_meta = $request->only('cashOnDeliveryAmount');
+                }
 
                 $paymentDetails->payment_meta = json_encode($payment_meta);
 
@@ -103,5 +104,15 @@ class OrderApiController extends Controller
         }
 
         return response()->json(['success' => 'Order Placed Successfully']);
+    }
+
+    private function _generateRandomOrderNumber(){
+
+        $date = date("Ymd");
+        $randomNumber = random_int(100000,999999);
+
+        $uniqueNumber = $date.$randomNumber;
+
+        return $uniqueNumber;
     }
 }

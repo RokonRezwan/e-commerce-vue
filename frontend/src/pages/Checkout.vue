@@ -156,13 +156,22 @@
                                         :class="showPaymentForm ? 'd-block' : 'd-none'">
                                         <div class="mb-2">
                                             <label for="paypal-email" class="form-label">Paypal Email</label>
-                                            <input type="number" id="paypal-email" name="paypal-email"
+                                            <input type="text" id="paypal-email" name="paypal-email"
                                                 class="form-control" placeholder="Paypal Email" v-model="paypalEmail" />
                                         </div>
                                         <div class="mb-2">
                                             <label for="paypal-amount" class="form-label">Paypal Amount</label>
                                             <input type="number" id="paypal-amount" name="paypal-amount"
                                                 class="form-control" placeholder="Paypal Amount" v-model="paypalAmount"/>
+                                        </div>
+                                    </div>
+
+                                    <div v-if="paymentMethod == 5" class="col-12"
+                                        :class="showPaymentForm ? 'd-block' : 'd-none'">
+                                        <div class="mb-2">
+                                            <label for="cashOnDeliveryAmount" class="form-label">Total Amount to Pay</label>
+                                            <input type="number" id="cashOnDeliveryAmount" name="cashOnDeliveryAmount" 
+                                                class="form-control" placeholder="Total Amount" v-model="cashOnDeliveryAmount"/>
                                         </div>
                                     </div>
                                 </div>
@@ -218,6 +227,8 @@ export default {
 
             paypalEmail: '',
             paypalAmount: '',
+
+            cashOnDeliveryAmount: '',
             
             showPaymentForm: false,
             sameAddress: false
@@ -289,6 +300,7 @@ export default {
                 cardCvv: this.cardCvv,
                 paypalEmail: this.paypalEmail,
                 paypalAmount: this.paypalAmount,
+                cashOnDeliveryAmount: this.cashOnDeliveryAmount,
                 
             }
 
