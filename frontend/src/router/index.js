@@ -2,6 +2,12 @@ import {createRouter, createWebHistory} from 'vue-router'
 
 const routes = [
   {
+    path: '/:pathMatch(.*)*',
+    name: "404",
+    component: () => import("../pages/404.vue"),
+  },
+
+  {
     path: "/",
     name: "Home",
     component: () => import("../views/Index.vue"),
@@ -53,4 +59,5 @@ const routes = [
 ];
 
 const router = createRouter({ history: createWebHistory(), routes });
+
 export default router;
