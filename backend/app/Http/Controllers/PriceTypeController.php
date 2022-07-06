@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\PriceType;
 use Illuminate\Http\Request;
+use App\Models\ProductPrices;
 use Illuminate\Database\QueryException;
 use App\Http\Requests\PriceType\StorePriceTypeRequest;
 use App\Http\Requests\PriceType\UpdatePriceTypeRequest;
 
 class PriceTypeController extends Controller
 {
-    private $_getColumns = (['id', 'name', 'is_active']);
+    private $_getColumns = ['id', 'name', 'is_active'];
     
     public function index()
     {
@@ -68,8 +69,16 @@ class PriceTypeController extends Controller
 
     public function destroy(PriceType $priceType)
     {
-        $priceType->delete();
+        $productPrices = ProductPrices::where('price_type_id', $priceType->id)
+                                        ->count();
 
+        if ($productPrices == 0) {
+            $priceType->delete();
+        } 
+        else {
+            return redirect()->route('priceTypes.index')->with('errorMsg', 'This Price Type has products price. You can not delete it.');
+        }
+        
         return redirect()->route('priceTypes.index')->with('status','Price Type has been deleted successfully !');
     }
 

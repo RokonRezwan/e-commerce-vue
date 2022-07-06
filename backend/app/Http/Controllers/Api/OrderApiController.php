@@ -28,10 +28,6 @@ class OrderApiController extends Controller
 
     public function store(Request $request)
     {
-        // $cartItems = $request['cartItems'];
-        // return response()->json(['success' => $cartItems]);
-
-
         try {
             DB::transaction(function () use($request)
             {

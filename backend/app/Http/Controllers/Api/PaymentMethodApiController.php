@@ -10,7 +10,8 @@ class PaymentMethodApiController extends Controller
 {
     public function index()
     {
-        $paymentMethods = PaymentMethod::where('is_active', true)->get(['id', 'name']);
+        $paymentMethods = PaymentMethod::where('is_active', true)
+                                        ->get(['id', 'name']);
         
         return response()->json([
             'paymentMethods' => $paymentMethods

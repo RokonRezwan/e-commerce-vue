@@ -13,7 +13,7 @@
                         <div class="row g-0 mt-2">
                             <div class="col-4 ps-1 g-0" style="padding-top:7px">                             
                                 <div class="input-group">
-                                    <select class="form-select shadow-none m-0" v-model="pageSize" style="max-width:70px">
+                                    <select class="form-select shadow-none m-0" v-model="pageSize" style="min-width:40px">
                                         <option value="10" selected>10</option>
                                         <option value="20">20</option>
                                         <option value="50">50</option>
@@ -100,7 +100,7 @@ export default {
             filterName: '1',
             filterByAD: '1',
             current: 1,
-            pageSize: 12,
+            pageSize: 10,
         }
     },
     

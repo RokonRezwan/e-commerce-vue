@@ -7,11 +7,10 @@
 
                         <ul v-if="isLoggedIn" class="navbar-nav ms-auto g-0">
                             <li class="nav-item">
-                                <a href="#" class="nav-link">{{ userName }}</a>
+                                <a href="#" class="nav-link">{{ userName ? userName : this.$store.getters.getUserName }}</a>
                             </li>
                             <li class="nav-item">
                                 <a href="#" @click="logout" class="nav-link">Logout</a>
-
                             </li>
                         </ul>
                         <ul v-else class="navbar-nav ms-auto g-0">

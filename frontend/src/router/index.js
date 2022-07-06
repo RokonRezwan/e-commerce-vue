@@ -20,10 +20,10 @@ const routes = [
   },
 
   {
-    path: "/category/:id",
+    path: "/category/:slug",
     name: "CategoryWiseProducts",
     component: () => import("../views/products/CategoryWiseProducts.vue"),
-    props: (route) => ({ id: Number(route.params.id) }),
+    props: true,
   },
 
   {
