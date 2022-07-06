@@ -8,29 +8,38 @@
         <div class="col-12">
           <div class="row p-2 mb-2">
             <div class="col-12 text-center border-bottom border-gray pb-2">
+<<<<<<< Updated upstream
               <strong class="fs-4"> Category: </strong
               ><strong class="fs-4 text-primary"
                 >{{ filterProducts[0].category.name }} (
                 {{ filterProducts.length }} )</strong
               >
+=======
+              <strong class="fs-4"> Category: </strong><strong v-if="filterProducts.length > 0"
+                class="fs-4 text-primary">{{ filterProducts[0].category.name }} (
+                {{ filterProducts.length }} )</strong>
+>>>>>>> Stashed changes
             </div>
 
             <div class="row g-0 mt-2">
               <div class="col-4 pe-2 text-end g-0" style="padding-top: 7px">
                 <div class="input-group">
+<<<<<<< Updated upstream
                   <select
                     class="form-select shadow-none m-0"
                     v-model="pageSize"
                     style="max-width: 70px"
                   >
+=======
+                  <select class="shadow-none m-0 p-1 ps-2" v-model="pageSize"
+                    style="width:60px; border: 1px solid #ccc">
+>>>>>>> Stashed changes
                     <option value="10" selected>10</option>
                     <option value="20">20</option>
                     <option value="50">50</option>
                   </select>
                   <div class="input-group-prepend">
-                    <span class="input-group-text bg-transparent border-0"
-                      >Products Show Per Page</span
-                    >
+                    <span class="input-group-text bg-transparent border-0">Products Show Per Page</span>
                   </div>
                 </div>
               </div>
@@ -38,20 +47,14 @@
                 <label for="password" class="form-label">Filter By</label>
               </div>
               <div class="col-2 pe-1">
-                <select
-                  v-model="filterName"
-                  class="form-select shadow-none w-100"
-                >
+                <select v-model="filterName" class="form-select shadow-none w-100">
                   <option value="1">Date</option>
                   <option value="2">Price</option>
                   <option value="3">Name</option>
                 </select>
               </div>
               <div class="col-3">
-                <select
-                  v-model="filterByAD"
-                  class="form-select shadow-none w-100"
-                >
+                <select v-model="filterByAD" class="form-select shadow-none w-100">
                   <option value="1">Order By DESC</option>
                   <option value="2">Order By ASC</option>
                 </select>
@@ -61,39 +64,25 @@
           <div class="row row-cols-1 row-cols-md-4 g-4">
             <div v-for="(product, index) in paginatedProducts" :key="index">
               <div class="card h-100">
-                <router-link
-                  :to="{ name: 'ProductDetails', params: { id: product.id } }"
-                  class="p-2"
-                >
-                  <img
-                    :src="
-                      'http://127.0.0.1:8000/product-images/' + product.image
-                    "
-                    class="card-img-top"
-                    :alt="product.name"
-                    style="height: 130px"
-                  />
+                <router-link :to="{ name: 'ProductDetails', params: { id: product.id } }" class="p-2">
+                  <img :src="
+                    'http://127.0.0.1:8000/product-images/' + product.image
+                  " class="card-img-top" :alt="product.name" style="height: 130px" />
                 </router-link>
                 <div class="card-body g-0">
                   <h6 class="card-title p-2 text-danger">
-                    <router-link
-                      :to="{
-                        name: 'ProductDetails',
-                        params: { id: product.id },
-                      }"
-                      class="router-link"
-                      >{{ product.name.substring(0, 35) }}
+                    <router-link :to="{
+                      name: 'ProductDetails',
+                      params: { id: product.id },
+                    }" class="router-link">{{ product.name.substring(0, 35) }}
                     </router-link>
                   </h6>
                 </div>
                 <div class="card-footer text-center fs-5 p-1">
                   <small class="text-primary float-start ms-2 pt-1">
-                    ${{ product.prices[0].amount.toFixed(2) }}</small
-                  >
-                  <button
-                    class="btn btn-outline-danger btn-sm float-end shadow-none"
-                    v-on:click="addToCart(product.id)"
-                  >
+                    ${{ product.prices[0].amount.toFixed(2) }}</small>
+                  <button class="btn btn-outline-danger btn-sm float-end shadow-none"
+                    v-on:click="addToCart(product.id)">
                     <i class="fas fa-shopping-cart"></i>
                   </button>
                 </div>
@@ -106,35 +95,17 @@
             <div class="col-12 py-2">
               <nav>
                 <ul class="pagination justify-content-center">
-                  <li
-                    class="page-item"
-                    v-bind:class="current === 1 ? 'disabled' : ''"
-                  >
-                    <a
-                      class="page-link shadow-none"
-                      style="cursor: pointer"
-                      @click="prev()"
-                      >Previous</a
-                    >
+                  <li class="page-item" v-bind:class="current === 1 ? 'disabled' : ''">
+                    <a class="page-link shadow-none" style="cursor: pointer" @click="prev()">Previous</a>
                   </li>
                   <li class="page-item active" aria-current="page">
                     <a class="page-link">{{ current }}</a>
                   </li>
                   <li class="page-item disabled p-0">
-                    <a class="page-link ps-1" aria-disabled="true"
-                      >of {{ totalPage }}</a
-                    >
+                    <a class="page-link ps-1" aria-disabled="true">of {{ totalPage }}</a>
                   </li>
-                  <li
-                    class="page-item"
-                    v-bind:class="current === totalPage ? 'disabled' : ''"
-                  >
-                    <a
-                      class="page-link shadow-none"
-                      style="cursor: pointer"
-                      @click="next()"
-                      >Next</a
-                    >
+                  <li class="page-item" v-bind:class="current === totalPage ? 'disabled' : ''">
+                    <a class="page-link shadow-none" style="cursor: pointer" @click="next()">Next</a>
                   </li>
                 </ul>
               </nav>
