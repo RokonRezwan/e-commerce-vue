@@ -15,7 +15,7 @@ use App\Http\Requests\Product\UpdateProductRequest;
 
 class ProductController extends Controller
 {
-    private $_getColumns = (['id', 'category_id', 'name', 'slug', 'image', 'description', 'is_active']);
+    private $_getColumns = ['id', 'category_id', 'name', 'slug', 'image', 'description', 'is_active'];
 
     public function index()
     {
@@ -57,31 +57,29 @@ class ProductController extends Controller
 
                     $product->save();
 
-                    $all_prices = $request->amount;
-                    $price_type_ids = $request->price_type_id;
-                    $start_date = $request->start_date;
-                    $end_date = $request->end_date;
+                    $allPrices = $request->amount;
+                    $priceTypeIds = $request->price_type_id;
+                    $startDate = $request->start_date;
+                    $endDate = $request->end_date;
 
                     $productPricesToInsert = [];
+
                     $createDate = date('Y-m-d H:i:s');
 
-                    if(($all_prices !== NULL) && ($price_type_ids !== NULL)){
-                        foreach ($all_prices as $index => $amount) {
+                    if(($allPrices !== NULL) && ($priceTypeIds !== NULL)){
+                        foreach ($allPrices as $index => $amount) {
                             $productPricesToInsert[] = [
                                 'product_id' => $product->id,
                                 'amount' => $amount,
-                                'price_type_id' => $price_type_ids[$index],
-                                'start_date' => $start_date[$index],
-                                'end_date' => $end_date[$index],
+                                'price_type_id' => $priceTypeIds[$index],
+                                'start_date' => $startDate[$index],
+                                'end_date' => $endDate[$index],
                                 'created_at' => $createDate,
                                 'updated_at' => $createDate,
                             ];
                         }
                     }
-
-                    if ( ($amount !== NULL) && ($price_type_ids[$index] !== NULL) ){
-                        $product->prices()->insert($productPricesToInsert);
-                    }
+                    ProductPrices::insert($productPricesToInsert);
                 });
 
             } catch (QueryException $e) {
@@ -123,57 +121,57 @@ class ProductController extends Controller
                     $product->image = $imageName;
                 }
 
-                $product->name = $request->name;
+                $name = $request->name;
+
+                $product->name = $name;
                 $product->category_id = $request->category_id;
-                $product->slug = Str::slug($request->name);
+                $product->slug = Str::slug($name);
                 $product->description = $request->description;
                 
                 $product->update();
 
-                $product_price_ids = $request->product_price_id;
-                $start_date = $request->start_date;
-                $end_date = $request->end_date;
+                $productPriceIds = $request->product_price_id;
+                $startDate = $request->start_date;
+                $endDate = $request->end_date;
                 
-                $cd=date('Y-m-d H:i:s');
+                $createDate=date('Y-m-d H:i:s');
 
-                if($product_price_ids){
-                    for ($i = 0; $i < count($product_price_ids); $i++) {
+                if($productPriceIds){
+                    for ($i = 0; $i < count($productPriceIds); $i++) {
 
                         $values = [
                             'product_id' => $product->id,
                             'amount' => $request->amount[$i],
-                            'start_date' => $start_date[$i],
-                            'end_date' => $end_date[$i],
-                            'updated_at' => $cd
+                            'start_date' => $startDate[$i],
+                            'end_date' => $endDate[$i],
+                            'updated_at' => $createDate,
                         ];
 
-                        $check_id = ProductPrices::find($product_price_ids[$i]);
+                        $checkId = ProductPrices::find($productPriceIds[$i]);
 
-                        if ($check_id) {
-                            $product->prices()->where('id', $check_id->id)->update($values);
+                        if ($checkId) {
+                            $product->prices()->where('id', $checkId->id)->update($values);
                         }
                     }
                 }
 
-                $price_type_new_ids = $request->price_type_new_id;
-                $new_start_date = $request->new_start_date;
-                $new_end_date = $request->new_end_date;
+                $priceTypeNewIds = $request->price_type_new_id;
+                $newStartDate = $request->new_start_date;
+                $newEndDate = $request->new_end_date;
 
-                    if($price_type_new_ids){
-                        for ($i = 0; $i < count($price_type_new_ids); $i++) {
-                            $values2 = [
+                    if($priceTypeNewIds){
+                        for ($i = 0; $i < count($priceTypeNewIds); $i++) {
+                            $newPriceTypes = [
                                 'product_id' => $product->id,
                                 'amount' => $request->new_amount[$i],
                                 'price_type_id' => $request->price_type_new_id[$i],
-                                'start_date' => $new_start_date[$i],
-                                'end_date' => $new_end_date[$i],
-                                'created_at' => $cd,
-                                'updated_at' => $cd,
+                                'start_date' => $newStartDate[$i],
+                                'end_date' => $newEndDate[$i],
+                                'created_at' => $createDate,
+                                'updated_at' => $createDate,
                             ];
-
-                            if ( ($request->new_amount[$i] !== NULL) && ($request->price_type_new_id[$i] !== NULL) ){
-                            $product->prices()->insert($values2);
-                            }
+                            ProductPrices::create($newPriceTypes);
+                            //$product->prices()->insert($newPriceTypes);
                         }
                     }
                 });
@@ -203,10 +201,10 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('status','Product active status has been changed successfully !');
     }
 
-    public function priceListDestroy($price_id)
+    public function priceListDestroy($priceId)
     {
-        $price = ProductPrices::find($price_id);
-        $price->delete();
+        $price = ProductPrices::find($priceId);
+        $price->forceDelete();
 
         return redirect()->back()->with('status','Price has been changed successfully !');
     }

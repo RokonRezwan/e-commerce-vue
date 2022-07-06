@@ -24,7 +24,7 @@ class ProductApiController extends Controller
     public function show(Product $api_product)
     {
         $product = Product::with('category:id,name,slug','prices:id,product_id,price_type_id,amount,start_date,end_date')
-                ->find($api_product->id);
+                         ->find($api_product->id);
         
         return response()->json([
                 'message' => "Product Showed Successfully!!",

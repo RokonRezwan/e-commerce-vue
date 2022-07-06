@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->integer('category_id')->unsigned();
             $table->string('name', 100);
-            $table->string('slug', 100);
+            $table->string('slug', 100)->unique();
 
             $table->string('image', 100)->nullable();
             $table->text('description')->nullable();

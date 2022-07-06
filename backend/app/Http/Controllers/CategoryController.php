@@ -31,9 +31,11 @@ class CategoryController extends Controller
         try 
         {
             $category = new Category; 
+
+            $name = $request->name;
             
-            $category->name = $request->name;
-            $category->slug = Str::slug($request->name, '-');
+            $category->name = $name;
+            $category->slug = Str::slug($name, '-');
             
             $category->save();
             
@@ -72,9 +74,9 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        $p = Product::where('category_id', $category->id)->count();
+        $product = Product::where('category_id', $category->id)->count();
 
-        if ($p == 0) {
+        if ($product == 0) {
             $category->delete();
         } 
         else {
