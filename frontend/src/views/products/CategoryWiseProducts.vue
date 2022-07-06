@@ -9,7 +9,7 @@
           <div class="row p-2 mb-2">
             <div class="col-12 text-center border-bottom border-gray pb-2">
               <strong class="fs-4"> Category: </strong
-              ><strong class="fs-4 text-primary"
+              ><strong v-if="filterProducts.length > 0" class="fs-4 text-primary"
                 >{{ filterProducts[0].category.name }} (
                 {{ filterProducts.length }} )</strong
               >
@@ -19,10 +19,8 @@
               <div class="col-4 pe-2 text-end g-0" style="padding-top: 7px">
                 <div class="input-group">
                   <select
-                    class="form-select shadow-none m-0"
-                    v-model="pageSize"
-                    style="max-width: 70px"
-                  >
+                    class="shadow-none m-0 p-1 ps-2"
+                    v-model="pageSize" style="width:60px; border: 1px solid #ccc">
                     <option value="10" selected>10</option>
                     <option value="20">20</option>
                     <option value="50">50</option>
@@ -154,8 +152,8 @@ export default {
   name: "CategoryWiseProducts",
 
   props: {
-    id: {
-      type: Number,
+    slug: {
+      type: String,
       required: true,
     },
   },
@@ -214,7 +212,7 @@ export default {
     },
 
     filterProductsByCategory: function (products) {
-      return products.filter((product) => product.category.id == this.id);
+      return products.filter((product) => product.category.slug == this.slug);
     },
 
     filterProductsByPrice: function (products) {

@@ -202,6 +202,7 @@
 <script>
 import axios from 'axios';
 import CartItem from '../components/CartItem.vue';
+        
 export default {
     name: 'Checkout',
     data() {
@@ -211,9 +212,9 @@ export default {
             paymentMethods: [],
             total_amount: 0,
 
-            shippingFullName: this.$store.getters.getUserData.name || '',
-            shippingContactNumber: this.$store.getters.getUserData.contact_number || '',
-            shippingAddress: this.$store.getters.getUserData.parmanent_address || '',
+            shippingFullName: this.$store.getters.getUserData.name || this.$store.getters.getUserName,
+            shippingContactNumber: this.$store.getters.getUserData.contact_number || this.$store.getters.getUserNumber,
+            shippingAddress: this.$store.getters.getUserData.parmanent_address || this.$store.getters.getUserAddress,
 
             billingFullName: '',
             billingContactNumber: '',
@@ -265,9 +266,9 @@ export default {
                 return true;
             }
             else{
-               // this.$router.push('/login')
+                this.$router.push('/login')
             }
-        }
+        },
     },
     
     methods: {

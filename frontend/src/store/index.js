@@ -13,6 +13,9 @@ export default createStore({
     userData: JSON.parse(localStorage.getItem("userData")) || [],
     loginError: "",
     registerErrors: "",
+    userName:'',
+    userNumber:'',
+    userAddress:''
   },
 
   getters: {
@@ -20,7 +23,7 @@ export default createStore({
       return state.loginError;
     },
 
-    getregisterErrors: (state) => {
+    getRegisterErrors: (state) => {
       return state.registerErrors;
     },
 
@@ -32,8 +35,20 @@ export default createStore({
       }
     },
 
+    getUserName:(state) => {
+      return state.userName
+    },
+
+    getUserNumber:(state) => {
+      return state.userNumber
+    },
+
+    getUserAddress:(state) => {
+      return state.userAddress
+    },
+
     getUserData: (state) => {
-      console.log(state.userData);
+      //console.log(state.userData)
       return state.userData;
     },
 
@@ -70,13 +85,25 @@ export default createStore({
     SET_CATEGORIES(state, categories) {
       state.categories = categories;
     },
+
     SET_LOGIN_ERROR(state, loginError) {
       state.loginError = loginError;
     },
 
     SET_REGISTER_ERRORS(state, registerErrors) {
-      console.log(registerErrors);
       state.registerErrors = registerErrors;
+    },
+
+    SET_USER_NAME(state, userName) {
+      state.userName = userName;
+    },
+
+    SET_USER_NUMBER(state, userNumber) {
+      state.userNumber = userNumber;
+    },
+
+    SET_USER_ADDRESS(state, userAddress) {
+      state.userAddress = userAddress;
     },
 
     SET_USER_DATA(state, userData) {
@@ -154,8 +181,8 @@ export default createStore({
         .post(apiApplicationPath + "/login", data)
         .then((response) => {
           if (response.data.isSuccessStatus === false) {
-            commit("SET_LOGIN_ERROR", JSON.stringify(response.data.errors));
-            console.log(response.data.errors);
+            commit("SET_LOGIN_ERROR", response.data.errors);
+            //console.log(response.data.errors);
           } else {
             localStorage.setItem(
               "userToken",
@@ -167,6 +194,11 @@ export default createStore({
             );
             commit("SET_USER_TOKEN", JSON.stringify(response.data.token));
             commit("SET_USER_DATA", JSON.stringify(response.data.user));
+            commit("SET_USER_NAME", response.data.user.name);
+            commit("SET_USER_NUMBER", response.data.user.contact_number);
+            commit("SET_USER_ADDRESS", response.data.user.parmanent_address);
+            commit("SET_LOGIN_ERROR", '');
+            
             // alert("Login Successfully");
             //console.log(response.data);
           }
@@ -181,8 +213,8 @@ export default createStore({
         .post(apiApplicationPath + "/register", data)
         .then((response) => {
           if (response.data.isSuccessStatus === false) {
-            commit("SET_REGISTER_ERRORS", JSON.stringify(response.data.errors));
-            console.log(response.data.errors);
+            commit("SET_REGISTER_ERRORS", response.data.errors);
+           // console.log(response.data.errors);
           } else {
             localStorage.setItem(
               "userToken",
@@ -194,7 +226,8 @@ export default createStore({
             );
             commit("SET_USER_TOKEN", JSON.stringify(response.data.token));
             commit("SET_USER_DATA", JSON.stringify(response.data.user));
-            alert("Register Successfully");
+            commit("SET_USER_NAME", response.data.user.name);
+            //alert("Register Successfully");
           }
         })
         .catch((error) => {
