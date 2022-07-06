@@ -13,7 +13,8 @@
                 <div class="card-body">
                     <div class="row g-0">
                         <div class="col-4">
-                            <img :src="'http://127.0.0.1:8000/product-images/'+ product.image" class="card-img-top" :alt="product.name" style="height:130px">
+                            <img :src="'http://127.0.0.1:8000/product-images/' + product.image" class="card-img-top"
+                                :alt="product.name" style="height:130px">
                         </div>
                         <div class="col-8 px-3 py-1">
                             <h3 class="card-title border-bottom pb-2">{{ product.name }}</h3>
@@ -21,20 +22,24 @@
                             <div class="row g-0">
                                 <div class="col-12">
                                     <div class="text-black fs-5">Category: <strong class="text-primary">
-                                        <router-link :to="{name: 'CategoryWiseProducts', params: {id: product.category.id}}" class="router-link p-2">
-                                            {{ product.category.name }}
-                                        </router-link>
+                                            <router-link
+                                                :to="{ name: 'CategoryWiseProducts', params: { slug: product.category.slug } }"
+                                                class="router-link p-2">
+                                                {{ product.category.name }}
+                                            </router-link>
                                         </strong></div>
                                     <div class="row g-0">
                                         <div class="col-sm-12 col-md-6 fs-4">
-                                            Price: <strong class="text-primary">${{ product.prices[0].amount.toFixed(2) }}</strong>
+                                            Price: <strong class="text-primary">${{ product.prices[0].amount.toFixed(2)
+                                            }}</strong>
                                         </div>
                                         <div class="col-sm-12 col-md-6 text-end">
-                                            <button class="btn btn-outline-danger mt-1 shadow-none" v-on:click="addToCart(product.id)">
+                                            <button class="btn btn-outline-danger mt-1 shadow-none"
+                                                v-on:click="addToCart(product.id)">
                                                 Add to Cart <i class="fas fa-shopping-cart"></i>
                                             </button>
                                         </div>
-                                    </div>                                   
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +79,7 @@ export default {
 
     watch: {
         id: function (value, oldValue) {
-            if (value !== oldValue ) {
+            if (value !== oldValue) {
                 axios.get('http://127.0.0.1:8000/api/api-products/' + this.id).then(response => (this.product = response.data.product));
             }
         },

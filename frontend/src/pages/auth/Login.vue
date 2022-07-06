@@ -36,18 +36,18 @@
           </div>
           <form @submit.prevent="onSubmitLoginForm">
             <div class="mb-3">
-              <label for="email" class="form-label">Email address</label>
+              <label for="email" class="form-label">Email address*</label>
               <input type="text" class="form-control" id="email" v-model="email" />
             </div>
             <div class="mb-3">
-              <label for="password" class="form-label">Password</label>
+              <label for="password" class="form-label">Password*</label>
               <input type="password" class="form-control" id="password" v-model="password" />
             </div>
             <div class="mb-3 form-check">
               <input type="checkbox" class="form-check-input" id="exampleCheck1" />
               <label class="form-check-label" for="exampleCheck1">Check me out</label>
             </div>
-            <button type="submit" @click="$router.go(-1)" class="btn btn-primary" style="width: 180px; font-size: 20px">
+            <button type="submit" class="btn btn-primary" style="width: 180px; font-size: 20px">
               Login
             </button>
           </form>
