@@ -48,10 +48,15 @@ class ProductController extends Controller
                     $product = new Product; 
 
                     $name =  $request->name;
+
+                    $slug = Str::slug($name);
+                    $count = Product::where('slug', 'LIKE', "{$slug}%")->count();
+                    $newCount = $count > 0 ? ++$count : '';
+                    $mySlug = $newCount > 0 ? "$slug-$newCount" : $slug;
                     
                     $product->name = $name;
                     $product->category_id = $request->category_id;
-                    $product->slug = Str::slug($name);
+                    $product->slug = $mySlug;
                     $product->image = $imageName;
                     $product->description = $request->description;
 
@@ -123,9 +128,14 @@ class ProductController extends Controller
 
                 $name = $request->name;
 
+                $slug = Str::slug($name);
+                $count = Product::where('slug', 'LIKE', "{$slug}%")->count();
+                $newCount = $count > 0 ? ++$count : '';
+                $mySlug = $newCount > 0 ? "$slug-$newCount" : $slug;
+
                 $product->name = $name;
                 $product->category_id = $request->category_id;
-                $product->slug = Str::slug($name);
+                $product->slug = $mySlug;
                 $product->description = $request->description;
                 
                 $product->update();

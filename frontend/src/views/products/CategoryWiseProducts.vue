@@ -48,7 +48,7 @@
           <div class="row row-cols-1 row-cols-md-4 g-4">
             <div v-for="(product, index) in paginatedProducts" :key="index">
               <div class="card h-100">
-                <router-link :to="{ name: 'ProductDetails', params: { id: product.id } }" class="p-2">
+                <router-link :to="{ name: 'ProductDetails', params: { slug: product.slug } }" class="p-2">
                   <img :src="
                     'http://127.0.0.1:8000/product-images/' + product.image
                   " class="card-img-top" :alt="product.name" style="height: 130px" />
@@ -57,7 +57,7 @@
                   <h6 class="card-title p-2 text-danger">
                     <router-link :to="{
                       name: 'ProductDetails',
-                      params: { id: product.id },
+                      params: { slug: product.slug },
                     }" class="router-link">{{ product.name.substring(0, 35) }}
                     </router-link>
                   </h6>

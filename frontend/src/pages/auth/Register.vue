@@ -50,27 +50,27 @@
                     
                         <div class="mb-3">
                             <label for="name" class="form-label">Full Name*</label>
-                            <input type="text" class="form-control" id="name" v-model="name">
+                            <input type="text" class="form-control" id="name" v-model="name" required autofocus >
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email address*</label>
-                            <input type="text" class="form-control" id="email" v-model="email">
+                            <input type="text" class="form-control" id="email" v-model="email" required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password*</label>
-                            <input type="password" class="form-control" id="password" v-model="password">
+                            <input type="password" class="form-control" id="password" v-model="password" required>
                         </div>
                         <div class="mb-3">
                             <label for="confirmPassword" class="form-label">Confirm Password*</label>
-                            <input type="password" class="form-control" id="confirmPassword" v-model="confirmPassword">
+                            <input type="password" class="form-control" id="confirmPassword" v-model="confirmPassword" required>
                         </div>
                         <div class="mb-3">
-                            <label for="ContactNumber" class="form-label">Contact Number ( Optional )</label>
-                            <input type="text" class="form-control" id="ContactNumber" v-model="ContactNumber">
+                            <label for="contactNumber" class="form-label">Contact Number ( Optional )</label>
+                            <input type="text" class="form-control" id="contactNumber" v-model="contactNumber">
                         </div>
                         <div class="mb-3">
-                            <label for="ParmanentAddress" class="form-label">Parmanent Address ( Optional )</label>
-                            <input type="text" class="form-control" id="ParmanentAddress" v-model="ParmanentAddress">
+                            <label for="parmanentAddress" class="form-label">Parmanent Address ( Optional )</label>
+                            <input type="text" class="form-control" id="parmanentAddress" v-model="parmanentAddress">
                         </div>
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="exampleCheck1">
@@ -101,8 +101,8 @@ export default {
             email: '',
             password: '',
             confirmPassword: '',
-            ContactNumber: '',
-            ParmanentAddress: '',
+            contactNumber: '',
+            parmanentAddress: '',
             errors: ''
         }
     },
@@ -119,10 +119,10 @@ export default {
 
     methods:{
         onSubmitRegisterForm(){
-            // if(this.name === '' || this.email === '' || this.password === '' || this.confirmPassword === ''){
-            //     alert('Email or Password can\'t be Empty');
-            //     return;
-            // }
+            if(this.name === '' || this.email === '' || this.password === '' || this.confirmPassword === ''){
+                alert('Email or Password can\'t be Empty');
+                return;
+            }
 
             const data = {
                 name: this.name,
@@ -130,8 +130,8 @@ export default {
                 password: this.password,
                 confirmPassword: this.confirmPassword,
 
-                contact_number: this.ContactNumber,
-                parmanent_address: this.ParmanentAddress
+                contact_number: this.contactNumber,
+                parmanent_address: this.parmanentAddress
 
             };
             this.$store.dispatch("register", data);

@@ -33,9 +33,14 @@ class CategoryController extends Controller
             $category = new Category; 
 
             $name = $request->name;
+
+            $slug = Str::slug($name);
+            $count = Category::where('slug', 'LIKE', "{$slug}%")->count();
+            $newCount = $count > 0 ? ++$count : '';
+            $mySlug = $newCount > 0 ? "$slug-$newCount" : $slug;
             
             $category->name = $name;
-            $category->slug = Str::slug($name, '-');
+            $category->slug = $mySlug;
             
             $category->save();
             
@@ -61,7 +66,15 @@ class CategoryController extends Controller
     {
         try 
         {
-            $category->name = $request->name;
+            $name = $request->name;
+
+            $slug = Str::slug($name);
+            $count = Category::where('slug', 'LIKE', "{$slug}%")->count();
+            $newCount = $count > 0 ? ++$count : '';
+            $mySlug = $newCount > 0 ? "$slug-$newCount" : $slug;
+            
+            $category->name = $name;
+            $category->slug = $mySlug;
 
             $category->update();
         } catch (QueryException $e) {

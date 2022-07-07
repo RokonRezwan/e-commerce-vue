@@ -27,10 +27,13 @@ const routes = [
   },
 
   {
-    path: "/product/:id",
+    path: "/product/:slug",
     name: "ProductDetails",
     component: () => import("../views/products/Details.vue"),
-    props: (route) => ({ id: Number(route.params.id) }),
+    props: true,
+    // beforeEnter(to, from, next) {
+    //   const exists = this.$store.getters.products.filter((product) => product.slug == this.slug);
+    // }
   },
 
   {

@@ -126,8 +126,11 @@ export default createStore({
           image: item.image,
           quantity: 1,
         });
+
+        alert('Product Added to Cart Successfully');
       } else {
         record.quantity++;
+        alert('Product already Added to Your Cart ! Quantity Updated.');
       }
     },
 
@@ -198,9 +201,6 @@ export default createStore({
             commit("SET_USER_NUMBER", response.data.user.contact_number);
             commit("SET_USER_ADDRESS", response.data.user.parmanent_address);
             commit("SET_LOGIN_ERROR", '');
-            
-            // alert("Login Successfully");
-            //console.log(response.data);
           }
         })
         .catch((error) => {
@@ -227,6 +227,9 @@ export default createStore({
             commit("SET_USER_TOKEN", JSON.stringify(response.data.token));
             commit("SET_USER_DATA", JSON.stringify(response.data.user));
             commit("SET_USER_NAME", response.data.user.name);
+            commit("SET_USER_NUMBER", response.data.user.contact_number);
+            commit("SET_USER_ADDRESS", response.data.user.parmanent_address);
+            commit("SET_REGISTER_ERRORS", '');
             //alert("Register Successfully");
           }
         })

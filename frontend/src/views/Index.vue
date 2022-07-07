@@ -39,7 +39,7 @@
             <div v-for="(product, index) in limitedProductsList" :key="index">
               <div class="card h-100">
                 <router-link
-                  :to="{ name: 'ProductDetails', params: { id: product.id } }"
+                  :to="{ name: 'ProductDetails', params: { slug: product.slug } }"
                   class="p-2"
                 >
                   <img
@@ -54,7 +54,7 @@
                     <router-link
                       :to="{
                         name: 'ProductDetails',
-                        params: { id: product.id },
+                        params: { slug: product.slug },
                       }"
                       class="router-link"
                       >{{ product.name.substring(0, 35) }}</router-link
